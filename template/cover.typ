@@ -3,7 +3,8 @@
 #let cover_page(
   title: "",
   author: "",
-  chair: []
+  chair: "",
+  school: ""
 ) = {
   set text(
     font: "TUM Neue Helvetica"
@@ -23,7 +24,7 @@
         text(
           fill: tum_blue,
           size: 8pt,
-          chair
+          [#chair \ #school \ Technical University of Munich]
         ),
         align(bottom + right, image("resources/TUM_Logo_blau.svg", height: 50%))
       )

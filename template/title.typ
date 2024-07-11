@@ -3,7 +3,12 @@
 #let title_page(
   title: "",
   author: "",
-  chair: []
+  chair: "",
+  school: "",
+  degree: "",
+  examiner: "",
+  supervisor: "",
+  submitted: ""
 ) = {
   set text(
     font: "TUM Neue Helvetica",
@@ -24,7 +29,7 @@
         text(
           fill: tum_blue,
           size: 8pt,
-          chair
+          [#chair \ #school \ Technical University of Munich]
         ),
         align(bottom + right, image("resources/TUM_Logo_blau.svg", height: 30%))
       )
@@ -45,15 +50,15 @@
 
   [Thesis for the attainment of the academic degree]
   v(1em)
-  [*Bachelor of Science (B.Sc.)*]
+  [*#degree*]
   v(1em)
-  [at the School of Computation, Information and Technology of the Technical University of Munich.]
+  [at the #school of the Technical University of Munich.]
 
   v(3cm)
 
-  [*Examiner:*\ Prof. Dr. Robert Wille]
+  [*Examiner:*\ #examiner]
   v(0em)
-  [*Supervisor:*\ DI Lucas Berent]
+  [*Supervisor:*\ #supervisor]
   v(0em)
-  [*Submitted:*\ Munich, 22.07.2024]
+  [*Submitted:*\ Munich, #submitted]
 }

@@ -5,13 +5,19 @@
 #let conf(
   title: "",
   author: "",
-  chair: [],
+  chair: "",
+  school: "",
+  degree: "",
+  examiner: "",
+  supervisor: "",
+  submitted: "",
   doc
 ) = {
   cover_page(
     title: title,
     author: author,
-    chair: chair
+    chair: chair,
+    school: school
   )
 
   pagebreak()
@@ -20,7 +26,12 @@
   title_page(
     title: title,
     author: author,
-    chair: chair
+    chair: chair,
+    school: school,
+    degree: degree,
+    examiner: examiner,
+    supervisor: supervisor,
+    submitted: submitted
   )
 
   pagebreak()
