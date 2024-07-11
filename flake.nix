@@ -23,7 +23,7 @@
         ];
 
         buildPhase = ''
-          typst compile main.typ
+          typst compile --font-path template/resources/ main.typ
         '';
 
         installPhase = ''
