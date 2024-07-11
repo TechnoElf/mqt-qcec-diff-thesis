@@ -21,3 +21,6 @@
 #include "content/conclusion.typ"
 #include "content/outlook.typ"
 
+#counter(heading).update(0)
+#bibliography("bibliography.bib", style: "mla")
+
