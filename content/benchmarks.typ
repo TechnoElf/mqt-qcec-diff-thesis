@@ -1,0 +1,2 @@
+= Benchmarks
+#lorem(200)
