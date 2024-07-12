@@ -37,7 +37,9 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "typix": "typix",
+        "typst-packages": "typst-packages"
       }
     },
     "systems": {
@@ -52,6 +54,42 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "typix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1720341806,
+        "narHash": "sha256-Z9h+Q2ijuUzoK6E8eOIs5nyMkwA3wD1ILzx29qTo+x4=",
+        "owner": "loqusion",
+        "repo": "typix",
+        "rev": "058a5dc2fb7abd6bfbfa355898914bcc01798213",
+        "type": "github"
+      },
+      "original": {
+        "owner": "loqusion",
+        "repo": "typix",
+        "type": "github"
+      }
+    },
+    "typst-packages": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1720615207,
+        "narHash": "sha256-Hh2fgicC68hq5oTig+tKzbqh8XbxQ+3PSKThIqOU5eo=",
+        "owner": "typst",
+        "repo": "packages",
+        "rev": "cd9b4250966792262b007fe200d9aa3bcb8d5aa4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "typst",
+        "repo": "packages",
         "type": "github"
       }
     }
