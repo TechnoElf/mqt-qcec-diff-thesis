@@ -25,6 +25,9 @@
   doc
 )
 
+#set math.vec(delim: "[")
+#set math.mat(delim: "[")
+
 #include "content/introduction.typ"
 #include "content/background.typ"
 #include "content/state.typ"
