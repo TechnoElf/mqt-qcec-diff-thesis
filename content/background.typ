@@ -99,7 +99,7 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
 
 
 == The Longest Common Subsequence Problem
-#example[
+#example(breakable: true)[
   #figure(
     diagram(
       node-stroke: .1em,

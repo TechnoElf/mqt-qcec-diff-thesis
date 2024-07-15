@@ -2,4 +2,5 @@
 /.envrc
 
 /result
-/main.pdf
+/*.pdf
+/content/**.pdf

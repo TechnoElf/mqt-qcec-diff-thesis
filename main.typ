@@ -36,8 +36,15 @@
 #include "content/conclusion.typ"
 #include "content/outlook.typ"
 
+#counter(heading).update(0)
+#heading(numbering: none)[List of Figures]
+#outline(
+  title: none,
+  target: figure.where(kind: image),
+)
+
 #include "glossary.typ"
 
 #counter(heading).update(0)
-#bibliography("bibliography.bib", style: "mla")
+#bibliography("bibliography.bib", style: "mla", full: true)
 

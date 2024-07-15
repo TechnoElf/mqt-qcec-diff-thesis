@@ -8,4 +8,6 @@
   (key: "dd", short: "DD", plural: "DDs", long: "decision diagram", longplural: "decision diagrams"),
   (key: "mqt", short: "MQT", long: "Munich Quantum Toolkit"),
   (key: "qcec", short: "QCEC", long: "Quantum Circuit Equivalence Checker"),
+  (key: "spsp", short: "SPSP", long: "single-pair shortest path"),
+  (key: "sssp", short: "SSSP", long: "single-source shortest path"),
 ))
