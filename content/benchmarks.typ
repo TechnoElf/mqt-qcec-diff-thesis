@@ -2,10 +2,10 @@
 #import "@preview/unify:0.6.0": qty
 
 = Benchmarks
-== Google Benchmark
-
-== MQT QCEC Bench
+== Test Cases
 To generate test cases for the application schemes, @mqt Bench was used. @quetschlich2023mqtbench
+
+== Results
 
 #tablex(
   columns: (1fr, 1fr, 1fr),
@@ -14,3 +14,4 @@ To generate test cases for the application schemes, @mqt Bench was used. @quetsc
   [DJ], [$qty("1.2e-6", "s")$], [$qty("1.5e-6", "s")$],
   [Grover], [$qty("1.3e-3", "s")$], [$qty("1.7e-3", "s")$]
 )
+

@@ -60,8 +60,9 @@
 
     set text(font: "TUM Neue Helvetica")
     if it.level == 1 [
-      #set text(size: 24pt)
+      #set text(font: "Times New Roman", size: 12pt)
       #pagebreak()
+      #set text(font: "TUM Neue Helvetica", size: 24pt)
       #if levels.at(0) != 0 {
         numbering("1", levels.at(0))
       }
@@ -90,6 +91,18 @@
   contents_page()
 
   pagebreak()
+
+  set page(
+    paper: "a4",
+    margin: (
+      top: 3cm,
+      bottom: 3cm,
+      x: 2cm,
+    ),
+    header: [],
+    footer: none,
+    numbering: "1"
+  )
 
   doc
 }

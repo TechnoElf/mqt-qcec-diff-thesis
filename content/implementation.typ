@@ -1,6 +1,10 @@
 #import "@preview/gentle-clues:0.9.0": example, code
 
 = Implementation
+The aim of this work is to modify diff algorithms for their use in quantum circuit equivalence checking and to integrate them into @mqt @qcec.
+Additionally, tooling for benchmarking these approaches against the state of the art is to be developed.
+The following sections will explore the implementation thereof.
+
 #include "implementation/algorithms.typ"
 
 == Visualisation
@@ -14,6 +18,12 @@ The Myers' Algorithm was implemented as an application scheme in @qcec.
 
 == QCEC Benchmarking Tool
 As @qcec doesn’t have built-in benchmarks, a benchmarking tool was developed to test different configurations on various circuit pairs.
+
+=== Google Benchmark
+The Google Benchmark framework was initially used to develop benchmarks for @mqt @qcec.
+
+=== MQT QCEC Bench
+As Google Benchmark lacked the needed flexibility, a new benchmarking wrapper around @mqt @qcec was developed.
 
 
 == Postprocessing of Edit Scripts
