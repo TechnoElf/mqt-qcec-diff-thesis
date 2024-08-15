@@ -47,4 +47,19 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
   ) <example_bdd_and>
 ]
 
+#example[
+  #figure(
+    diagram(
+      node-stroke: .1em,
+      node((1, 0), [$x_0$], radius: 1em),
+      edge((1, 0), (0, 2), [0], "->", bend: -20deg),
+      edge((1, 0), (0, 2), [1], "->", bend: -10deg),
+      edge((1, 0), (0, 2), [1], "->", bend: 10deg),
+      edge((1, 0), (0, 2), [1], "->", bend: 20deg),
+      node((0, 2), [$0$]),
+    ),
+    caption: [A @dd.]
+  ) <example_dd>
+]
 
+A quantum @dd in turn is a representation of the system matrix of a quantum circuit.

@@ -3,4 +3,4 @@
 
 /result
 /*.pdf
-/content/**.pdf
+/content/**/*.pdf
