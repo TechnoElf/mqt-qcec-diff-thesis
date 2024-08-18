@@ -68,6 +68,17 @@
     ]
   })
 
+  set page(
+    paper: "a4",
+    margin: (
+      top: 3cm,
+      bottom: 3cm,
+      x: 2cm,
+    ),
+    header: [],
+    footer: []
+  )
+
   contents_page()
 
   pagebreak(to: "odd")
@@ -80,12 +91,6 @@
   )
 
   set page(
-    paper: "a4",
-    margin: (
-      top: 3cm,
-      bottom: 3cm,
-      x: 2cm,
-    ),
     header: [],
     footer: locate(loc =>
       if calc.rem(loc.page(), 2) == 0 {
