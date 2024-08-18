@@ -20,8 +20,7 @@
     school: school
   )
 
-  pagebreak()
-  pagebreak()
+  pagebreak(to: "odd")
 
   title_page(
     title: title,
@@ -34,35 +33,16 @@
     submitted: submitted
   )
 
-  pagebreak()
-
-  set page(
-    paper: "a4",
-    margin: (
-      top: 3cm,
-      bottom: 3cm,
-      x: 2cm,
-    ),
-    header: [],
-    footer: []
-  )
-
-  set par(justify: true)
-  set align(left)
-  set text(
-    font: "Times New Roman",
-    size: 12pt,
-  )
-
   set heading(numbering: "1.")
   show heading: it => locate(loc => {
     let levels = counter(heading).at(loc)
 
     set text(font: "TUM Neue Helvetica")
     if it.level == 1 [
-      #set text(font: "Times New Roman", size: 12pt)
-      #pagebreak()
-      #set text(font: "TUM Neue Helvetica", size: 24pt)
+      #if levels.at(0) != 1 {
+        pagebreak(to: "odd")
+      }
+      #set text(size: 24pt)
       #if levels.at(0) != 0 {
         numbering("1", levels.at(0))
       }
@@ -90,7 +70,14 @@
 
   contents_page()
 
-  pagebreak()
+  pagebreak(to: "odd")
+
+  set par(justify: true)
+  set align(left)
+  set text(
+    font: "Times New Roman",
+    size: 12pt
+  )
 
   set page(
     paper: "a4",
@@ -100,8 +87,13 @@
       x: 2cm,
     ),
     header: [],
-    footer: none,
-    numbering: "1"
+    footer: locate(loc =>
+      if calc.rem(loc.page(), 2) == 0 {
+        align(left, text(font: "TUM Neue Helvetica", size: 10pt, counter(page).display("1")));
+      } else {
+        align(right, text(font: "TUM Neue Helvetica", size: 10pt, counter(page).display("1")));
+      }
+    )
   )
 
   doc

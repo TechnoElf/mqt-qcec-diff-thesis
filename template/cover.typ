@@ -6,11 +6,7 @@
   chair: "",
   school: ""
 ) = {
-  set text(
-    font: "TUM Neue Helvetica"
-  )
-
-  set page(
+  page(
     paper: "a4",
     margin: (
       top: 3cm,
@@ -24,23 +20,24 @@
         text(
           fill: tum_blue,
           size: 8pt,
+          font: "TUM Neue Helvetica",
           [#chair \ #school \ Technical University of Munich]
         ),
         align(bottom + right, image("resources/TUM_Logo_blau.svg", height: 50%))
       )
     ],
     footer: []
-  )
+  )[
+    #v(1cm)
 
-  v(1cm)
+    #align(top + left)[#text(font: "TUM Neue Helvetica", size: 24pt, [*#title*])]
+    
+    #v(3cm)
 
-  set align(top + left)
-  text(size: 24pt, [*#title*])
+    #text(font: "TUM Neue Helvetica", fill: tum_blue, size: 17pt, [*#author*])
+    
+    #align(bottom + right)[#image("resources/TUM_Tower.png", width: 60%)]
+  ]
 
-  v(3cm)
-
-  text(fill: tum_blue, size: 17pt, [*#author*])
-  
-  set align(bottom + right)
-  image("resources/TUM_Tower.png", width: 60%)
+  pagebreak()
 }
