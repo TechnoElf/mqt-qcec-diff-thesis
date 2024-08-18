@@ -1,5 +1,6 @@
 == QCEC Benchmarking Tool
 As @qcec doesn’t have built-in benchmarks, a benchmarking tool was developed to test different configurations on various circuit pairs. 
+This was necessary to show the quantitative improvement gained by using different application schemes.
 Two different approaches were implemented, which will be discussed in the following sections.
 
 === Google Benchmark
@@ -47,3 +48,4 @@ It also caches the results so future runs of the benchmark can be started more q
 Google Benchmark has a convenient feature to reduce the noise of measurements that was initially lacking from @qcec bench.
 When the runtime of the benchmark is very short, it will automatically increase the run count to calculate a more precise average.
 This technique was also adopted in @qcec bench as the variance for some of the smaller benchmark instances was too high to allow proper interpretation of the results.
+

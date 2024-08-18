@@ -1,2 +1,3 @@
 == QCEC Application Scheme
-The Myers' Algorithm was implemented as an application scheme in @qcec.
+Based on the lessons learnt from Kaleidoscope, the Myers' algorithm was implemented as an application scheme in @qcec.
+

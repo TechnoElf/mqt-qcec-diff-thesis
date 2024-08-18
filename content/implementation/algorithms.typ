@@ -429,3 +429,4 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   ),
   caption: [Patience algorithm.]
 ) <patience_algorithm_abstract>
+
