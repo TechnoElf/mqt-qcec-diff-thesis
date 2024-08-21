@@ -10,10 +10,6 @@ Initially, research was done to determine suitable algorithms for the task.
 A variety of algorithms was found, but only a limited representative set was chosen for implementation due to their similarity and the given time constraints.
 The chosen algorithms are: Djikstra's algorithm (for its simplicity), Myers' algorithm (for its ubiquity) and the patience algorithm (for its relative novelty).
 
-All of these algorithms had a common issue, however.
-For a diff algorithm to be useful as an application scheme for @qcec, it must output a list of pairs of numbers describing the quantity of gates to apply from either circuit.
-This is contrary to the typical requirement of an edit script that describes insert, remove and keep operations.
-
 === Djikstra's Algorithm
 Djikstra's algorithm is an @sssp algorithm.
 This means that it solves the problem of finding the shortest distance from a node of a graph to any other node @djikstra1959shortest.
@@ -430,3 +426,49 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   caption: [Patience algorithm.]
 ) <patience_algorithm_abstract>
 
+=== Adaptation of Diff Algorithms for @qcec
+All of these algorithms had a common issue, however.
+For a diff algorithm to be useful as an application scheme for @qcec, it must output a list of pairs of numbers describing the quantity of gates to apply from either circuit.
+This is contrary to the typical requirement of an edit script that describes insert, remove and keep operations.
+These operations, however, correspond directly to the application:
+- A removal operation in the edit script is analogous to the application of a gate from the left of the first circuit, expanding the @dd.
+- An insertion operation in turn is analogous to the inverse application of a gate from the right of the second circuit, theoretically bringing the @dd closer to the identity again.
+- Finally, A keep operation causes both applications simultaneously, which should leave the @dd unchanged.
+
+Furthermore, the specifications of the actual gates that are being applied are redundant once the edit script has been found.
+Only the application order is significant to the algorithm.
+This results in a sequence consisting only of the operations "apply first", "apply second" and "apply both".
+Sequences of identical operations can also be combined into a single operation as this does not affect the application order.
+Each application operation can then be represented by a tuple of two values $(r, l)$, the first of which specifies the gates to be applied from the first circuit, and the other those from the second.
+
+Additionally, the order of the gates in the second circuit must be inverted before calculating the edit script.
+This is due to the "socks and shoes" rule of matrix inversion: For the product of two matrices $A$ and $B$ $(A B) ^ (-1) =B ^ (-1) A ^ (-1)$.
+The inversion of the product may be calculated by taking the inverse of each matrix and multiplying them in reverse order.
+By induction the same is true for the product of any number of matrices.
+
+As quantum gates and circuits are representations of matrices, the same rule applies to them as well.
+The @dd\-based alternating equivalence checker therefore not only inverts each gate in the second circuit, but reverses their application order as well.
+This means that the second circuit must also be reversed before applying the diff algorithm in order to find structural similarities between the first circuit and the inverse of the second circuit.
+
+The following example illustrates these concepts graphically.
+
+#example[
+  Keeping the same sequence as used in the previous examples, "hxhy" and "yhhx", @example_edit_script_conversion demonstrates the conversion of an edit script as produced by the discussed diff algorithms into a form useable by @qcec.
+  The edit script used is identical to the one found in @example_path.
+
+  #figure(
+    grid(
+      columns: (4fr, 2fr, 4fr, 2fr, 4fr),
+      [`+ y` \ `+ h` \ `keep h` \ `keep x` \ `- h` \ `- y`],
+      align(horizon)[$->$ \ convert],
+      [$(0, 1) \ (0, 1) \ (1, 1) \ (1, 1) \ (1, 0) \ (1, 0)$],
+      align(horizon)[$->$ \ simplify],
+      [$(0, 2) \ (2, 2) \ (2, 0)$]
+    ),
+    kind: image,
+    caption: [Sample transformation of edit script operations into a sequence of gate applications.]
+  ) <example_edit_script_conversion>
+
+  In this example, the second circuit is assumed to have been inverted beforehand.
+  The original circuit would have been "xhhy".
+]
