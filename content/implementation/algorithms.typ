@@ -426,7 +426,101 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   caption: [Patience algorithm.]
 ) <patience_algorithm_abstract>
 
-=== Adaptation of Diff Algorithms for @qcec
+#code(breakable: true)[
+  As with the Myers' algorithm, the implementation of the Patience algorithm differs slightly from the abstract representation.
+
+  #block(
+    pseudocode-list[
+      + *def* $"patience"(x, y, m, n)$
+        + $"index_matches" = "find_index_matches"(x, y, m, n)$
+        + *if* $"index_matches"$ *is empty*
+          + *return* $"myers"(x, y, m, n)$
+        + *end*
+        + $"increasing_matches" = "patience_sort"("index_matches")$
+        + *append* $(m, n)$ *to* $"increasing_matches"$
+        + $"edit_script"$ *is* $"vector of" ("integer", "integer")$
+        + $("prev_a_index", "prev_b_index") = (0, 0)$
+        + *for* $("a_index", "b_index")$ *in* $"increasing_matches"$
+          + $("a_delta", "b_delta") = ("a_index" - "prev_a_index", "b_index" - "prev_b_index")$
+          + *if* $"a_delta" > 0 and "b_delta" > 0$
+            + *append* $"patience"("prev_a_index", "prev_b_index", "a_delta", "b_delta")$ *to* $"edit_script"$
+          + *else if* $"a_delta" > 0$
+            + *append* $("a_delta", 0)$ *to* $"edit_script"$
+          + *else if* $"b_delta" > 0$
+            + *append* $(0, "b_delta")$ *to* $"edit_script"$
+          + *end*
+          + *if* $"a_index" = m and "b_index" = n$
+            + *return* $"edit_script"$
+          + *end*
+          + *if* $($*last element of* $"edit_script")[0] = ($*last element of* $"edit_script")[1]$ {
+            + $($*last element of* $"edit_script")[0] = ($*last element of* $"edit_script")[0] + 1$
+            + $($*last element of* $"edit_script")[1] = ($*last element of* $"edit_script")[1] + 1$
+          + *else* 
+            + *append* $(1, 1)$ *to* $"edit_script"$
+          + *end*
+          + $("prev_a_index", "prev_b_index") = ("a_index" + 1, "b_index" + 1)$
+        + *end*
+      + *end*
+    ],
+    width: 100%
+  )
+
+  #block(
+    pseudocode-list[
+      + *def* $"find_index_matches"(x, y, m, n)$
+        + $"a_count"$ *is* $"map of gates to integers"$
+        + $"a_index"$ *is* $"map of gates to integers"$
+        + $"b_count"$ *is* $"map of gates to integers"$
+        + $"b_index"$ *is* $"map of gates to integers"$
+        + *for* i *in* 0 *to* m
+          + $"a_count"[A[x + i]] = "a_count"[A[x + i]] + 1$
+          + $"a_index"[A[x + i]] = i$
+        + *end*
+        + *for* i *in* 0 *to* n
+          + $"b_count"[B[x + i]] = "b_count"[B[x + i]] + 1$
+          + $"b_index"[B[x + i]] = i$
+        + *end*
+        + $"index_matches"$ *is* $"map of integers to integers"$
+        + *for* $("gate", "count")$ *in* $"a_count"$
+          + *if* $"count" = 1 and "b_count"["gate"] = 1$
+            + $"index_matches"["a_index"["gate"]] = "b_index"["gate"]$
+          + *end*
+        + *end*
+        + *return* $"index_matches"$
+      + *end*
+    ],
+    width: 100%
+  )
+
+  #block(
+    pseudocode-list[
+      + *def* $"patience_sort"("index_matches")$
+        + $"a_count"$ *is* $"map of gates to integers"$
+        + $"a_index"$ *is* $"map of gates to integers"$
+        + $"b_count"$ *is* $"map of gates to integers"$
+        + $"b_index"$ *is* $"map of gates to integers"$
+        + *for* i *in* 0 *to* m
+          + $"a_count"[A[x + i]] = "a_count"[A[x + i]] + 1$
+          + $"a_index"[A[x + i]] = i$
+        + *end*
+        + *for* i *in* 0 *to* n
+          + $"b_count"[B[x + i]] = "b_count"[B[x + i]] + 1$
+          + $"b_index"[B[x + i]] = i$
+        + *end*
+        + $"index_matches"$ *is* $"map of integers to integers"$
+        + *for* $("gate", "count")$ *in* $"a_count"$
+          + *if* $"count" = 1 and "b_count"["gate"] = 1$
+            + $"index_matches"["a_index"["gate"]] = "b_index"["gate"]$
+          + *end*
+        + *end*
+        + *return* $"index_matches"$
+      + *end*
+    ],
+    width: 100%
+  )
+]
+
+=== Adaptation of Diff Algorithms for QCEC
 All of these algorithms had a common issue, however.
 For a diff algorithm to be useful as an application scheme for @qcec, it must output a list of pairs of numbers describing the quantity of gates to apply from either circuit.
 This is contrary to the typical requirement of an edit script that describes insert, remove and keep operations.
@@ -442,7 +536,7 @@ Sequences of identical operations can also be combined into a single operation a
 Each application operation can then be represented by a tuple of two values $(r, l)$, the first of which specifies the gates to be applied from the first circuit, and the other those from the second.
 
 Additionally, the order of the gates in the second circuit must be inverted before calculating the edit script.
-This is due to the "socks and shoes" rule of matrix inversion: For the product of two matrices $A$ and $B$ $(A B) ^ (-1) =B ^ (-1) A ^ (-1)$.
+This is due to the "socks and shoes" rule of matrix inversion: For the product of two matrices $A$ and $B$ the equation $(A B) ^ (-1) = B ^ (-1) A ^ (-1)$ must hold.
 The inversion of the product may be calculated by taking the inverse of each matrix and multiplying them in reverse order.
 By induction the same is true for the product of any number of matrices.
 
@@ -459,11 +553,11 @@ The following example illustrates these concepts graphically.
   #figure(
     grid(
       columns: (4fr, 2fr, 4fr, 2fr, 4fr),
-      [`+ y` \ `+ h` \ `keep h` \ `keep x` \ `- h` \ `- y`],
+      align(horizon)[`+ y` \ `+ h` \ `keep h` \ `keep x` \ `- h` \ `- y`],
       align(horizon)[$->$ \ convert],
-      [$(0, 1) \ (0, 1) \ (1, 1) \ (1, 1) \ (1, 0) \ (1, 0)$],
+      align(horizon)[$(0, 1) \ (0, 1) \ (1, 1) \ (1, 1) \ (1, 0) \ (1, 0)$],
       align(horizon)[$->$ \ simplify],
-      [$(0, 2) \ (2, 2) \ (2, 0)$]
+      align(horizon)[$(0, 2) \ (2, 2) \ (2, 0)$]
     ),
     kind: image,
     caption: [Sample transformation of edit script operations into a sequence of gate applications.]
