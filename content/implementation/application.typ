@@ -2,7 +2,7 @@
 Based on the lessons learnt from Kaleidoscope, the Myers' algorithm was implemented as an application scheme in @mqt @qcec.
 This was accomplieshed by adding appropriate C++ classes and extending the existing functionality for configuring equivalence checking runs.
 
-=== The `DiffApllicationScheme` Class
+=== The `DiffApplicationScheme` Class
 In general, @qcec is written in a very flexible manner.
 The software enables additional application schemes to be added by inheriting a class called `ApplicationScheme`, that is templated with the current equivalence checking configuration.
 This class has a single virtual method which must be implemented, namely the `()` operator.

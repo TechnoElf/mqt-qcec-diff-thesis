@@ -80,7 +80,10 @@ The implementation is thus as follows:
 ) <mod_djikstras_algorithm_abstract>
 
 #example[
-  @example_djikstra shows an example instance of the modified Djikstra's algorithm shown in @mod_djikstras_algorithm_abstract. The edge labels specify the order in which the nodes are visited (child nodes are iterated over from top right to bottom left). The red edges highlight the final path found by the algorithm after traversing the parent nodes from the final node in reverse order.
+  @example_djikstra shows an example instance of the modified Djikstra's algorithm shown in @mod_djikstras_algorithm_abstract.
+  The edge labels specify the order in which the nodes are visited.
+  Child nodes are iterated over from top right to bottom left in this case, however the order is not important for the functionality of the algorithm.
+  The red edges highlight the final path found by the algorithm after traversing the parent nodes from the final node in reverse order.
 
   #figure(
     diagram(
@@ -145,10 +148,8 @@ The implementation is thus as follows:
   ) <example_djikstra>
 ]
 
-
 At this point, it was considered wether to implement another @spsp algorithm such as A\*.
 This was, however, deemed unnecessary, as there exist better solutions tailored specifically to edit graphs.
-
 
 === Myers' Algorithm
 #figure(
@@ -171,7 +172,7 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
 ) <myers_algorithm_abstract>
 
 
-#example[
+#example(breakable: true)[
   Applying the first step of the abstract Myers' algorithm to the sample edit graph from @example_edit_graph yields the connecting snake marked in red in @example_snake. The algorithm then saves this snake as part of the edit script and continues working on the resulting subgraphs, as shown in @example_recursion. It will then combine the edit scripts from these with the connecting snake to form a final edit script.
 
   #figure(
@@ -271,133 +272,115 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   The actual implementation of Myers' algorithm uses a slightly different procedure, where the subgraphs are checked for triviality instead of the input graph.
   This would be slower when the entire edit graph is trivial, however, this edge case will almost never occur when applying this algorithm to equivalence checking of quantum circuits. 
 
-  #figure(
-    block(
-      pseudocode-list[
-        + *def* $"myers"(x, y, m, n)$
-          + $("snake_start_x", "snake_start_y", "snake_end_x", "snake_end_y") = "find_snake"(x, y, m, n)$
-          + $"result" = {}$
-          + $"result" = "result" + "process_subgraph"(x, y, "snake_start_x", "snake_start_y", m, n)$
-          + $"result" = "result" + ("snake_end_x" - "snake_start_x", "snake_end_x" - "snake_start_x")$
-          + $"result" = "result" + "process_subgraph"(x + "snake_end_x", y + "snake_end_y", m - "snake_end_x", n - "snake_end_y", m, n)$
-          + *return* $"result"$
-        + *end*
-      ],
-      width: 100%
-    ),
-    caption: [Myers' algorithm.]
-  ) <myers_algorithm>
+  #block(
+    pseudocode-list[
+      + *def* $"myers"(x, y, m, n)$
+        + $("snake_start_x", "snake_start_y", "snake_end_x", "snake_end_y") = "find_snake"(x, y, m, n)$
+        + $"result" = {}$
+        + $"result" = "result" + "process_subgraph"(x, y, "snake_start_x", "snake_start_y", m, n)$
+        + $"result" = "result" + ("snake_end_x" - "snake_start_x", "snake_end_x" - "snake_start_x")$
+        + $"result" = "result" + "process_subgraph"(x + "snake_end_x", y + "snake_end_y", m - "snake_end_x", n - "snake_end_y", m, n)$
+        + *return* $"result"$
+      + *end*
+    ],
+    width: 100%
+  )
 
-  #figure(
-    block(
-      pseudocode-list[
-        + *def* $"process_subgraph"(x, y, w, h, m, n)$
-          + *if* $(w = 0 and h != 0) or (w != 0 and h = 0)$
-            + *return* $(w, h)$
-          + *else if* $w = m and h = n$
-            + *if* $w > h$
-              + *return* ${(h, h), (w - h, 0)}$
-            + *else*
-              + *return* ${(w, w), (0, h - w)}$
-            + *end*
+  #block(
+    pseudocode-list[
+      + *def* $"process_subgraph"(x, y, w, h, m, n)$
+        + *if* $(w = 0 and h != 0) or (w != 0 and h = 0)$
+          + *return* $(w, h)$
+        + *else if* $w = m and h = n$
+          + *if* $w > h$
+            + *return* ${(h, h), (w - h, 0)}$
           + *else*
-            + *return* $"myers"(x, y, w, h)$
+            + *return* ${(w, w), (0, h - w)}$
           + *end*
+        + *else*
+          + *return* $"myers"(x, y, w, h)$
         + *end*
-      ],
-      width: 100%
-    ),
-    caption: [Myers' algorithm ($"process_subgraph"$ function).]
-  ) <myers_algorithm_process_subgraph>
+      + *end*
+    ],
+    width: 100%
+  )
 
-  #figure(
-    block(
-      pseudocode-list[
-        + *def* $"find_snake"(x, y, m, n)$
-          + $"best_x_forward"$ *is* $"array"((m + n) * 2 + 1)$
-          + $"best_x_backward"$ *is* $"array"((m + n) * 2 + 1)$
-          + *for* operations *in* $0$ *to* $m + n$
-            + *for* diagonal *in* $-("operations" - 2 * max(0, "operations" - m))$ *to* $"operations" - 2 * max(0, "operations" - m)$
-              + $"calculate_best_x_forward"("best_x_forward", "diagonal", m, n)$
-              + $"snake_start" = "follow_snake_forward"("best_x_forward", "diagonal", x, y, m, n)$
-              + *if* $"overlap_forward"()$
-                + $"snake_start_x" = "snake_start"$
-                + $"snake_start_y" = "snake_start" - "diagonal"$
-                + $"snake_end_x" = "best_x_forward"[m + n + "diagonal"]$
-                + $"snake_end_y" = "best_x_forward"[m + n + "diagonal"] - "diagonal"$
-                + *return* $("snake_start_x", "snake_start_y", "snake_end_x", "snake_end_y")$
-              + *end*
-            + *end*
-            + *for* diagonal *in* $-("operations" - 2 * max(0, "operations" - m))$ *to* $"operations" - 2 * max(0, "operations" - m)$
-              + $"calculate_best_x_backward"("best_x_forward", "diagonal", m, n)$
-              + $"snake_end" = "follow_snake_backward"("best_x_backward", "diagonal", x, y, m, n)$
-              + *if* $"overlap_backward"()$
-                + $"snake_start_x" = m - "best_x_forward"[m + n + "diagonal"]$
-                + $"snake_start_y" = n - "best_x_forward"[m + n + "diagonal"] + "diagonal"$
-                + $"snake_end_x" = m - "snake_end"$
-                + $"snake_end_y" = n - "snake_end" + "diagonal"$
-                + *return* $("snake_start_x", "snake_start_y", "snake_end_x", "snake_end_y")$
-              + *end*
+  #block(
+    pseudocode-list[
+      + *def* $"find_snake"(x, y, m, n)$
+        + $"best_x_forward"$ *is* $"array"((m + n) * 2 + 1)$
+        + $"best_x_backward"$ *is* $"array"((m + n) * 2 + 1)$
+        + *for* operations *in* $0$ *to* $m + n$
+          + *for* diagonal *in* $-("operations" - 2 * max(0, "operations" - m))$ *to* $"operations" - 2 * max(0, "operations" - m)$
+            + $"calculate_best_x_forward"("best_x_forward", "diagonal", m, n)$
+            + $"snake_start" = "follow_snake_forward"("best_x_forward", "diagonal", x, y, m, n)$
+            + *if* $"overlap_forward"()$
+              + $"snake_start_x" = "snake_start"$
+              + $"snake_start_y" = "snake_start" - "diagonal"$
+              + $"snake_end_x" = "best_x_forward"[m + n + "diagonal"]$
+              + $"snake_end_y" = "best_x_forward"[m + n + "diagonal"] - "diagonal"$
+              + *return* $("snake_start_x", "snake_start_y", "snake_end_x", "snake_end_y")$
             + *end*
           + *end*
+          + *for* diagonal *in* $-("operations" - 2 * max(0, "operations" - m))$ *to* $"operations" - 2 * max(0, "operations" - m)$
+            + $"calculate_best_x_backward"("best_x_forward", "diagonal", m, n)$
+            + $"snake_end" = "follow_snake_backward"("best_x_backward", "diagonal", x, y, m, n)$
+            + *if* $"overlap_backward"()$
+              + $"snake_start_x" = m - "best_x_forward"[m + n + "diagonal"]$
+              + $"snake_start_y" = n - "best_x_forward"[m + n + "diagonal"] + "diagonal"$
+              + $"snake_end_x" = m - "snake_end"$
+              + $"snake_end_y" = n - "snake_end" + "diagonal"$
+              + *return* $("snake_start_x", "snake_start_y", "snake_end_x", "snake_end_y")$
+            + *end*
+          + *end*
         + *end*
-      ],
-      width: 100%
-    ),
-    caption: [Myers' algorithm ($"find_snake"$ function).]
-  ) <myers_algorithm_find_snake>
+      + *end*
+    ],
+    width: 100%
+  )
 
-  #figure(
-    block(
-      pseudocode-list[
-        + *def* $"calculate_best_x_forward"("best_x_forward", "diagonal", m, n)$
-          + *if* $"diagonal" = -"operations"$
-            + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" + 1]$
-          + *else if* $"diagonal" = "operations"$
+  The implementations of the $"_backward"$ functions used in the `find_snake()` function are analogous to the $"_forward"$ functions shown in the following code blocks.
+
+  #block(
+    pseudocode-list[
+      + *def* $"calculate_best_x_forward"("best_x_forward", "diagonal", m, n)$
+        + *if* $"diagonal" = -"operations"$
+          + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" + 1]$
+        + *else if* $"diagonal" = "operations"$
+          + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" - 1]$
+        + *else*
+          + *if* $"best_x_forward"[m + n + "diagonal" - 1] > "best_x_forward"[m + n + "diagonal" + 1]$
             + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" - 1]$
           + *else*
-            + *if* $"best_x_forward"[m + n + "diagonal" - 1] > "best_x_forward"[m + n + "diagonal" + 1]$
-              + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" - 1]$
-            + *else*
-              + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" + 1]$
-            + *end*
+            + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal" + 1]$
           + *end*
         + *end*
-      ],
-      width: 100%
-    ),
-    caption: [Myers' algorithm ($"calculate_best_x_forward"$ function).]
-  ) <myers_algorithm_calculate_best_x_forward>
+      + *end*
+    ],
+    width: 100%
+  )
 
-  #figure(
-    block(
-      pseudocode-list[
-        + *def* $"follow_snake_forward"("best_x_forward", "diagonal", x, y, m, n)$
-          + $"snake_start" = "best_x_forward"[m + n + "diagonal"]$
-          + *while* $"best_x_forward"[m + n + "diagonal"] < m and "best_x_forward"[m + n + "diagonal"] < n and A[x + "best_x_forward"[m + n + "diagonal"]] == B[y + "best_x_forward"[m + n + "diagonal"] - "diagonal"]$ 
-            + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal"] + 1$
-          + *end*
-          + *return* $"snake_start"$
+  #block(
+    pseudocode-list[
+      + *def* $"follow_snake_forward"("best_x_forward", "diagonal", x, y, m, n)$
+        + $"snake_start" = "best_x_forward"[m + n + "diagonal"]$
+        + *while* $"best_x_forward"[m + n + "diagonal"] < m and "best_x_forward"[m + n + "diagonal"] < n and A[x + "best_x_forward"[m + n + "diagonal"]] == B[y + "best_x_forward"[m + n + "diagonal"] - "diagonal"]$ 
+          + $"best_x_forward"[m + n + "diagonal"] = "best_x_forward"[m + n + "diagonal"] + 1$
         + *end*
-      ],
-      width: 100%
-    ),
-    caption: [Myers' algorithm ($"follow_snake_forward"$ function).]
-  ) <myers_algorithm_follow_snake_forward>
+        + *return* $"snake_start"$
+      + *end*
+    ],
+    width: 100%
+  )
 
-  #figure(
-    block(
-      pseudocode-list[
-        + *def* $"overlap_forward"("best_x_forward", "best_x_backward", "diagonal", x, y, m, n)$
-          + *return* $(-2n < "diagonal") and ("diagonal" < 2m) and ("best_x_forward"[m + n + "diagonal"] != -1) and ("best_x_backward"[2m + "diagonal"] != -1) and ("best_x_forward"[m + n + "diagonal"] + "best_x_backward"[2m + "diagonal"] >= m)$
-        + *end*
-      ],
-      width: 100%
-    ),
-    caption: [Myers' algorithm ($"overlap_forward"$ function).]
-  ) <myers_algorithm_overlap_forward>
-
-  The $"_backward"$ functions used in @myers_algorithm_find_snake are analogous to the $"_forward"$ functions shown in @myers_algorithm_calculate_best_x_forward, @myers_algorithm_follow_snake_forward and @myers_algorithm_overlap_forward.
+  #block(
+    pseudocode-list[
+      + *def* $"overlap_forward"("best_x_forward", "best_x_backward", "diagonal", x, y, m, n)$
+        + *return* $(-2n < "diagonal") and ("diagonal" < 2m) and ("best_x_forward"[m + n + "diagonal"] != -1) and ("best_x_backward"[2m + "diagonal"] != -1) and ("best_x_forward"[m + n + "diagonal"] + "best_x_backward"[2m + "diagonal"] >= m)$
+      + *end*
+    ],
+    width: 100%
+  )
 ]
 
 === Patience Algorithm
@@ -425,6 +408,140 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   ),
   caption: [Patience algorithm.]
 ) <patience_algorithm_abstract>
+
+#example(breakable: true)[
+  To run the patience algorithm on a pair of input sequences, pairs of unique common must first be found.
+  In this example, the already established strings "hxhy" and "yhhx" will be used.
+  @example_unique_common shows the unique common elements for these strings.
+
+  #figure(
+    diagram(
+      spacing: 1cm,
+      node-stroke: .1em,
+      node((0, 0), radius: 1em, "h", shape: rect),
+      edge((0, 0), (1, 0), "->"),
+      node((1, 0), radius: 1em, "x", shape: rect),
+      edge((1, 0), (2, 0), "->"),
+      node((2, 0), radius: 1em, "h", shape: rect),
+      edge((2, 0), (3, 0), "->"),
+      node((3, 0), radius: 1em, "y", shape: rect),
+      node((0, 2), radius: 1em, "y", shape: rect),
+      edge((0, 2), (1, 2), "->"),
+      node((1, 2), radius: 1em, "h", shape: rect),
+      edge((1, 2), (2, 2), "->"),
+      node((2, 2), radius: 1em, "h", shape: rect),
+      edge((2, 2), (3, 2), "->"),
+      node((3, 2), radius: 1em, "x", shape: rect),
+
+      edge((1, 0), (3, 2), "<->", stroke: 1.5pt),
+      edge((3, 0), (0, 2), "<->", stroke: 1.5pt)
+    ),
+    caption: [Finding unique common elements.]
+  ) <example_unique_common>
+
+  The unique common elements are "x" (at indices 1 and 3) and "y" (at indices 3 and 0).
+  In this case, the longest increasing sequence of these elements is obviously either "x" or "y".
+  To illustrate the patience sort, the pair of strings "a\_b\_c\_d\_" and "\_ca\_bd" will therefore be used instead.
+  @example_unique_common_long visualises the unique common elements of the two strings.
+
+  #figure(
+    diagram(
+      spacing: 1cm,
+      node-stroke: .1em,
+      node((0, 0), radius: 1em, "a", shape: rect),
+      edge((0, 0), (1, 0), "->"),
+      node((1, 0), radius: 1em, "_", shape: rect),
+      edge((1, 0), (2, 0), "->"),
+      node((2, 0), radius: 1em, "b", shape: rect),
+      edge((2, 0), (3, 0), "->"),
+      node((3, 0), radius: 1em, "_", shape: rect),
+      edge((3, 0), (4, 0), "->"),
+      node((4, 0), radius: 1em, "c", shape: rect),
+      edge((4, 0), (5, 0), "->"),
+      node((5, 0), radius: 1em, "_", shape: rect),
+      edge((5, 0), (6, 0), "->"),
+      node((6, 0), radius: 1em, "d", shape: rect),
+      edge((6, 0), (7, 0), "->"),
+      node((7, 0), radius: 1em, "_", shape: rect),
+      node((1, 2), radius: 1em, "_", shape: rect),
+      edge((1, 2), (2, 2), "->"),
+      node((2, 2), radius: 1em, "c", shape: rect),
+      edge((2, 2), (3, 2), "->"),
+      node((3, 2), radius: 1em, "a", shape: rect),
+      edge((3, 2), (4, 2), "->"),
+      node((4, 2), radius: 1em, "_", shape: rect),
+      edge((4, 2), (5, 2), "->"),
+      node((5, 2), radius: 1em, "b", shape: rect),
+      edge((5, 2), (6, 2), "->"),
+      node((6, 2), radius: 1em, "d", shape: rect),
+
+      edge((0, 0), (3, 2), "<->", stroke: 1.5pt),
+      edge((2, 0), (5, 2), "<->", stroke: 1.5pt),
+      edge((4, 0), (2, 2), "<->", stroke: 1.5pt),
+      edge((6, 0), (6, 2), "<->", stroke: 1.5pt)
+    ),
+    caption: [Unique common elements of a more complex pair of sequences.]
+  ) <example_unique_common_long>
+
+  Possible increasing sequences of matching pairs in this case include "cd", "ab", "bd" and "abd".
+  Using the patience sort algorithm, the longest of these pairs can be determined.
+
+  #figure(
+    diagram(
+      spacing: 1cm,
+      node-stroke: .1em,
+      node((0, 0), radius: 1em, "a", shape: rect),
+      node((1, 0), radius: 1em, "b", shape: rect),
+      node((0, 0.5), radius: 1em, "c", shape: rect),
+      node((2, 0), radius: 1em, "d", shape: rect),
+
+      edge((1, 0), (0, 0), "->"),
+      edge((2, 0), (1, 0), "->"),
+
+    ),
+    caption: [Piles constructed by the patience sort algorithm.]
+  ) <example_patience_sort>
+
+  The matching pairs are iterated over in the order they appear in the first string.
+  Initially, a pile with the element "a" is created and its index in the second string is recorded.
+
+  Next, the element "b" is added.
+  As its index in the second string is greater than that of "a", a new pile is created.
+  Again, the index is recorded and a reference to the topmost element of the previous pile is added.
+
+  The next element to be added is "c".
+  Its index in the second string is lower than that of "a", so it is added to the top of the pile.
+
+  Finally, "d" is added.
+  The index of "d" in the second string is greater than any of the indices of the topmost elements of all existing piles, so, a new pile is created again.
+  A reference to the topmost element of the previous pile, "b", is also added.
+
+  Tracing all the references from the topmost element of the last pile produces the longest increasing sequence of unique common elements: "abd".
+  For the first example shown in @example_unique_common, the algorithm would have produced a single pile with "y" stacked on top of "x", thus giving "y" as the longest increasing sequence.
+
+  The sequence can then be converted into a list of indices into the input strings, which, in turn, can be converted into a list of ranges between these indices, as shown in @example_unique_ranges.
+
+  #figure(
+    grid(
+      columns: (4fr, 1fr, 4fr, 1fr, 4fr),
+      align(horizon)[$"a" \ "b" \ "d"$],
+      align(horizon)[$->$],
+      align(horizon)[$(0, 2) \ (2, 4) \ (6, 5)$],
+      align(horizon)[$->$],
+      align(horizon)[$("none", 0 "to" 1) \ (1 "to" 1, 3 "to" 3) \ (3 "to" 5, "none") \ (7 "to" 7, "none")$]
+    ),
+    caption: [Converting the sequence of unique elements to a sequence of subranges of the input strings.]
+  ) <example_unique_ranges>
+
+  The subranges are then iterated over to generate the edit script.
+  For the ranges found in @example_unique_ranges, only $(1 "to" 1, 3 "to" 3)$ must be evaluated recursively, while the others are trivial as they only contain elements from one of the two input strings.
+  The edit script would therefore be $[$`+_`, `+c`, `keep a`, `keep _`, `keep b`, `-_`, `-c`, `-_`, `keep d`, `-_`$]$.
+
+  For the strings "hxhy" and "yhhx" the final edit script would thus be $[$`-h`, `-x`, `-h`, `keep y`, `+h`, `+h`, `+x`$]$.
+  This is clearly not a solution to the @lcs problem, however, as discussed, the patience algorithm does not actually seek to fully solve this problem.
+  It is only guaranteed to produce valid edit scripts, not optimal ones.
+  The effect of this will be investigated in later sections.
+]
 
 #code(breakable: true)[
   As with the Myers' algorithm, the implementation of the Patience algorithm differs slightly from the abstract representation.
@@ -495,25 +612,31 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   #block(
     pseudocode-list[
       + *def* $"patience_sort"("index_matches")$
-        + $"a_count"$ *is* $"map of gates to integers"$
-        + $"a_index"$ *is* $"map of gates to integers"$
-        + $"b_count"$ *is* $"map of gates to integers"$
-        + $"b_index"$ *is* $"map of gates to integers"$
-        + *for* i *in* 0 *to* m
-          + $"a_count"[A[x + i]] = "a_count"[A[x + i]] + 1$
-          + $"a_index"[A[x + i]] = i$
-        + *end*
-        + *for* i *in* 0 *to* n
-          + $"b_count"[B[x + i]] = "b_count"[B[x + i]] + 1$
-          + $"b_index"[B[x + i]] = i$
-        + *end*
-        + $"index_matches"$ *is* $"map of integers to integers"$
-        + *for* $("gate", "count")$ *in* $"a_count"$
-          + *if* $"count" = 1 and "b_count"["gate"] = 1$
-            + $"index_matches"["a_index"["gate"]] = "b_index"["gate"]$
+        + $"piles"$ *is* $"vector of vector of" ("integer", "integer", "integer")$
+        + *for* $("a_index", "b_index")$ *in* $"index_matches"$
+          + *if* $"piles"$ *is empty*
+            + *append* $("a_index", "b_index", 0)$ *to* $"piles"$
+          + *else*
+            + *for* $i$ *in* 0 *to* *length of* $"piles"$ {
+              + *if* $i =$ *length of* $"piles"$ {
+                + *append* $("a_index", "b_index", ($*length of* $"piles"[i - 1]) - 1)$ *to* $"piles"$
+                + *break*
+              + *end*
+              + *if* $($*last element of* $"piles"[i])[1] > "b_index"$
+                + *append* $("a_index", "b_index", ($*length of* $"piles"[i - 1]) - 1)$ *to* $"piles"$
+                + *break*
+              + *end*
+            + *end*
           + *end*
         + *end*
-        + *return* $"index_matches"$
+        + $"increasing_matches"$ *is* $"vector of" ("integer", "integer")$
+        + $"prev_pile_element" =$ *length of* $($*last element of* $"piles") - 1$
+        + *for* $"pile"$ *in* *reverse* $"piles"$
+          + $"element" = "piles"["prev_pile_element"]$
+          + *append* $("element"[0], "element"[1])$ *to* $"increasing_matches"$
+          + $"prev_pile_element" = "element"[2]$
+        + *end*
+        + *return* $"increasing_matches"$
       + *end*
     ],
     width: 100%
