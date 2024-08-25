@@ -171,7 +171,6 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   caption: [Myers' algorithm.]
 ) <myers_algorithm_abstract>
 
-
 #example(breakable: true)[
   Applying the first step of the abstract Myers' algorithm to the sample edit graph from @example_edit_graph yields the connecting snake marked in red in @example_snake. The algorithm then saves this snake as part of the edit script and continues working on the resulting subgraphs, as shown in @example_recursion. It will then combine the edit scripts from these with the connecting snake to form a final edit script.
 
@@ -384,6 +383,17 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
 ]
 
 === Patience Algorithm
+The patience algorithm is based around a divide-and-conquor approach that splits up the input sequences into many subranges, which the algorithm is then recursively run on.
+Specifically, it seeks to find elements that occur only once in each sequence and match these up to produce as many `keep` operations as possible.
+
+Unlike the Myers' algorithm, the patience algorithm does not, in fact, solve the @lcs problem.
+Instead, it only aims to produce valid edit scripts, that are qualitatively superior for human use.
+It was designed as an alternative to the Myers' algorithm for the version control software `git` with the aim of generating more sensible diffs when code is refactored.
+For this purpose it is simply not necessary and sometimes even detrimental to produce an optimal edit script.
+Wether or not this approach also positively affects the performance of the equivalence checking process will be explored in this thesis.
+
+An abstract description of the algorithm is given in @patience_algorithm_abstract.
+
 #figure(
   block(
     pseudocode-list[
@@ -406,8 +416,40 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
     ],
     width: 100%
   ),
-  caption: [Patience algorithm.]
+  caption: [The patience algorithm.]
 ) <patience_algorithm_abstract>
+
+While most of these steps are trivial, the patience sort procedure requires some elaboration.
+This sorting algorithm finds the longest possible sequence of matching element pairs in the two sequences, where the indices in both are monotonically increasing.
+It does this by creating a list of piles of elements that grow vertically, and where horizontal connections represent valid increasing sequences.
+@patience_sort_abstract provides additional details on the algorithm.
+
+#figure(
+  block(
+    pseudocode-list[
+      + *def* $"patience_sort"("matches")$
+        + ensure $"matches"$ is sorted by the indices into the first string (this is already the case in the patience algorithm)
+        + create a list of piles (which are just lists) of elements that consist of an index into each input string and a reference to another element, and which is initially empty
+        + create a new pile containing the first entry in $"matches"$ with an empty reference
+        + *for* each subsequent unique matching element in $"matches"$
+          + find the first pile where the index into the second string of the topmost element is greater than the index into the second string of the current element
+          + *if* such a pile exists
+            + add the current element to the top of the pile
+          + *else*
+            + create a new pile with the current element
+          + *end*
+          + add a reference to the current element pointing to the topmost element on the previous pile
+        + *end*
+        + follow the references backwards from the topmost element of the last pile
+        + *return* the reverse of the found path
+      + *end*
+    ],
+    width: 100%
+  ),
+  caption: [The patience sorting algorithm.]
+) <patience_sort_abstract>
+
+The following example illustrates the functionality of the patience diff algorithm and the patience sort graphically.
 
 #example(breakable: true)[
   To run the patience algorithm on a pair of input sequences, pairs of unique common must first be found.
@@ -484,7 +526,8 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   ) <example_unique_common_long>
 
   Possible increasing sequences of matching pairs in this case include "cd", "ab", "bd" and "abd".
-  Using the patience sort algorithm, the longest of these pairs can be determined.
+  This pattern lends itself to a visual analogy: A valid sequence must not contain crossings when the strings are graphed as in @example_unique_common_long.
+  Using the patience sort algorithm, the longest sequence that satisfies this condition can be found.
 
   #figure(
     diagram(
@@ -543,8 +586,17 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   The effect of this will be investigated in later sections.
 ]
 
+This algorithm was only implemented in @qcec.
+Since it requires the use of another diff algorithm as a fallback, the Myers' algorithm had to be implemented first anyway.
+Due to time constraints, is was therefore deemed unneccessary to implement it in Kaleidoscope.
+The following code block discusses the final implementation that was created for @qcec.
+
 #code(breakable: true)[
   As with the Myers' algorithm, the implementation of the Patience algorithm differs slightly from the abstract representation.
+  In all of the following functions, it is assumed that the input circuits are accessible through the global variables $A$ and $B$.
+  These contain some sort of representation of the gates in the circuits which must be useable as an index into a map (for example by providing a hash function).
+  $x$, $y$, $m$, and $n$ are there to provide the recursive functionality of the function.
+  These specify the subsection of the circuits being processed and must be set to $0$, $0$ and the length of the two sequences respectively.
 
   #block(
     pseudocode-list[
