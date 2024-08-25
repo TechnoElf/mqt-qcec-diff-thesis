@@ -152,6 +152,11 @@ At this point, it was considered wether to implement another @spsp algorithm suc
 This was, however, deemed unnecessary, as there exist better solutions tailored specifically to edit graphs.
 
 === Myers' Algorithm
+Myers' algorithm in its original form only solves the @lcs problem without producing an edit script for transorming one input sequence into the other @myers1986diff.
+The version presented here has been extended to provide this functionality.
+It does so by using the edit graph traversal of the original algorithm to find a point that must be part of the shortest edit script and then recursively applying the algorithm to the two remaining subgraphs.
+@myers_algorithm_abstract presents the pseudocode for this procedure.
+
 #figure(
   block(
     pseudocode-list[
@@ -170,6 +175,8 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   ),
   caption: [Myers' algorithm.]
 ) <myers_algorithm_abstract>
+
+The following example visually demonstrates how the edit graph is split up by the recursive calls in the algorithm.
 
 #example(breakable: true)[
   Applying the first step of the abstract Myers' algorithm to the sample edit graph from @example_edit_graph yields the connecting snake marked in red in @example_snake. The algorithm then saves this snake as part of the edit script and continues working on the resulting subgraphs, as shown in @example_recursion. It will then combine the edit scripts from these with the connecting snake to form a final edit script.
@@ -267,9 +274,19 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
   ) <example_recursion>
 ]
 
+This algorithm was implemented in both Kaleidoscope and @qcec.
+As such, the implementation was extended and reworked several times to optimise it for quantum circuit equivalence checking.
+The discussion on diff visualisation in the following sections will explore some of the improvements made to the algorithm.
+The version presented here is the final version that was integrated into @qcec.
+
 #code(breakable: true)[
   The actual implementation of Myers' algorithm uses a slightly different procedure, where the subgraphs are checked for triviality instead of the input graph.
   This would be slower when the entire edit graph is trivial, however, this edge case will almost never occur when applying this algorithm to equivalence checking of quantum circuits. 
+
+  The following functions use the global lists $A$ and $B$ to access the structure of the input circuits.
+  These contain some sort of representation of the gates in the circuits that can be checked for equivalence.
+  Recursion is implemented with the parameters $x$, $y$, $m$, and $n$.
+  These specify the subsection of the circuits being processed and must be set to $0$, $0$ and the length of the two sequences respectively for the first call.
 
   #block(
     pseudocode-list[
