@@ -6,12 +6,15 @@
 #import "@preview/tablex:0.0.8"
 #import "@preview/unify:0.6.0"
 #import "@preview/quill:0.3.0"
+#import "@preview/wordometer:0.1.2": word-count, total-words
 
 #import "template/conf.typ": conf
 
 #show: make-glossary
 
 #set document(title: "Equivalence Checking of Quantum Circuits using Diff Algorithms", author: "Janis Heims")
+
+#show: word-count
 
 #show: doc => conf(
   title: "Equivalence Checking of Quantum Circuits using Diff Algorithms",
@@ -47,4 +50,7 @@
 
 #counter(heading).update(0)
 #bibliography("bibliography.bib", style: "mla", full: true)
+
+#pagebreak()
+Total word count: #total-words
 
