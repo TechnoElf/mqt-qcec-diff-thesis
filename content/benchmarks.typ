@@ -154,7 +154,7 @@ There are therefore 5 different versions of each circuit, resulting in $sum_(n=1
 - Mapped representation with full optimisation
 
 == Environment
-The following data was collected using @mqt\-@qcec\-bench, the benchmarking tool.
+The following data was collected using @mqt @qcec Bench, the benchmarking tool developed in the course of this work.
 It was compiled using clang 17.0.6, cmake 3.29.2 and ninja 1.11.1.
 cmake was configured to build the application in release mode and without tests or python bindings.
 
@@ -175,17 +175,17 @@ It was determined that the variance due to context switches was low enough, so t
 - The trace threshold is set to $10^(-8)$
 - Partial equivalence checking is disabled.
 
-Additionally, the following configuration was used for @qcec\-bench:
+Additionally, the following configuration was used for @qcec Bench:
 - The timeout is set to 30 seconds.
 - The minimum run count for each benchmark is 3.
 
 == Results
 @results_overview_histogram presents an overview of the performed benchmarking runs.
 The results are sorted into bins and portrayed as a histogram.
-A larger count in atherefore points towards a better algorithm.
+A larger count in a bin that is further to the left therefore points towards a better algorithm.
 
 This graph suggests that there is no significant difference in the runtime of the tested algorithms and configurations in most cases.
-The proportional application scheme has a slight advantage in benchmarks that have a higher runtime.
+The proportional application scheme does, however, appear to have a slight advantage in benchmarks that have a higher runtime.
 
 #figure(
   canvas({
@@ -269,12 +269,13 @@ Taking the average of this improvement for each variant of the diff-based applic
 ) <results_average_improvement>
 
 These results show that, on average, every variant of the diff-base application scheme results in a significantly worse runtime compared to the state-of-the-art proportional application scheme.
-Of these, the the reversed Myers' algorithms performed the worst by a significant margin.
+Of these, the reversed Myers' algorithms performed the worst by a significant margin.
 On the other hand, the processed variants performed better than their plain counterparts.
 This shows that the approach of reversing the second circuit before running the diff algorithm is clearly wrong, but processing the edit script to make it more suitable for use in the equivalnce checker tends to work in most cases.
 
 By comparing the run time improvement to various independent variables, a scheme was developed to determine wether or not applying the diff application scheme would result in a positive improvement.
-The key variable for this scheme.
+The key variable for this scheme turned out to be the equivalence rate of the two circuits.
+It was determined by counting the number of keep operations in the edit script and dividing it by the total size of the circuits.
 In @results_equivalence_rate, the results of each variant are plotted dependent on their respective equivalence rates.
 
 #figure(
@@ -340,11 +341,11 @@ In @results_equivalence_rate, the results of each variant are plotted dependent 
 ) <results_equivalence_rate>
 
 The plot suggests that diff-based application schemes tend to do better when the equivalence rate is higher.
-This makes sense as there is no structure that could be exploited using an edit script to apply gates when there are no common subsequences in the two circuits.
+This makes sense as there is no structure that could be exploited using an edit script to apply gates when there are few common subsequences in the two circuits.
 
 Even so, the right side of the graph is obviously very noisy for most diff variants.
 The results of the application scheme based on the processed Myers' algorithm look especially interesting in this regard, as they tend to rank higher than those of the other algorithms.
-@results_equivalence_rate_processed shows this application scheme on its own to highlight the relationship betwenn the variables.
+@results_equivalence_rate_processed shows this application scheme on its own to highlight the relationship between the variables.
 
 #figure(
   canvas({
@@ -374,9 +375,10 @@ The results of the application scheme based on the processed Myers' algorithm lo
   ]
 ) <results_equivalence_rate_processed>
 
-Using an equivalence rate of $0.35$ as a limit, it is possible to separate most good benchmark instances where it is beneficial to use a diff-based application time from those where the runtime increases.
+Using an equivalence rate of $0.35$ as a limit, it is possible to separate most good benchmark instances where it is beneficial to use a diff-based application scheme from those where the run time increases.
 As this value was determined empirically, it may need further adjustment based on more thorough tests.
 For the benchmark instances used in this thesis, it was sufficiently precise, however.
+@results_filtered_improvement visualises the run time improvement of the benchmark instances filtered using the described approach.
 
 #figure(
   canvas({
@@ -397,6 +399,6 @@ For the benchmark instances used in this thesis, it was sufficiently precise, ho
   ]
 ) <results_filtered_improvement>
 
-These results are clearly significantly better than those obtained through the naive approach of applying the scheme to all equivalence checking instances.
+These results are significantly better than those obtained through the naive approach of applying the scheme to all equivalence checking instances.
 The average of the runtime improvement of the filtered test cases is $#{calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).sum() / filter(unclip(results-r1-b5q16)).len(), digits: 3)}%$, with a maximum improvement of $#{calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.max), digits: 3)}%$ and a maximum regression of $#{-calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.min), digits: 3)}%$.
 
