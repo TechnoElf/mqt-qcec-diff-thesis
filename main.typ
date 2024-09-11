@@ -51,6 +51,6 @@
 #counter(heading).update(0)
 #bibliography("bibliography.bib", style: "mla", full: true)
 
-#pagebreak()
-Total word count: #total-words
+//#pagebreak()
+//Total word count: #total-words
 
