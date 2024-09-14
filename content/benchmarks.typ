@@ -399,6 +399,12 @@ For the benchmark instances used in this thesis, it was sufficiently precise, ho
   ]
 ) <results_filtered_improvement>
 
+#let mu = calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).sum() / filter(unclip(results-r1-b5q16)).len(), digits: 3)
+#let sigma = calc.round(calc.sqrt(filter(unclip(results-r1-b5q16)).map(r => calc.pow(-(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100) - mu, 2)).sum() / filter(unclip(results-r1-b5q16)).len()), digits: 3)
+#let max = calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.max), digits: 3)
+#let min = -calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.min), digits: 3)
+
 These results are significantly better than those obtained through the naive approach of applying the scheme to all equivalence checking instances.
-The average of the runtime improvement of the filtered test cases is $#{calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).sum() / filter(unclip(results-r1-b5q16)).len(), digits: 3)}%$, with a maximum improvement of $#{calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.max), digits: 3)}%$ and a maximum regression of $#{-calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.min), digits: 3)}%$.
+The average of the runtime improvement of the filtered test cases is $#mu%$, with a standard deviation of $#sigma%$.
+Furthermore, the application scheme results in a maximum improvement of $#max%$ and a maximum regression of $#min%$.
 
