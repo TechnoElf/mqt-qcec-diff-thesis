@@ -150,9 +150,13 @@ The following example illustrates the functionailty of each of these schemes.
 ]
 
 == Other Verification Methods
-Besides reducing a @dd to the identity, alternative methods for verifying equivalent functionality of quantum circuits exist. One approach involves the use of ZX-calculus @kissinger2020pyzx.
+Besides reducing a @dd to the identity, alternative methods for verifying equivalent functionality of quantum circuits exist.
+One approach involves the use of ZX-calculus, an alternative means of representing quantum circuits @kissinger2020pyzx.
+As with the @dd\-based approach, this representation can be used for equivalnce checking by constructing the two ZX diagram and checking if it is possible to transform one into the other @peham2022zx.
+Alternatively, the same more efficient approach of reducing the concatenation of the first circuit and the inverse of the second circuit to the identity may also be used with this method.
 
-Additionally, in the case of proving non-equivalence, it is sufficient to find inputs that produce different outputs.
+Additionally, there are more efficient solutions for specific cases of the verification problem.
+For instance, in the case of proving non-equivalence, it is sufficient to find inputs that produce different outputs.
 In this case, it is usually more efficient to simulate such a case on both circuits and compare the outputs.
 @qcec makes use of this fact by initially running three simulation instances using random inputs @burgholzer2021ec.
 Only if the simulation runs each produce identical outputs is another verification method attempted.
