@@ -1,6 +1,7 @@
 #import "@preview/cetz:0.2.2": canvas, draw
 #import "@preview/fletcher:0.5.1": diagram, node, edge
 #import "@preview/gentle-clues:0.9.0": example
+#import "@preview/tablex:0.0.8": tablex, vlinex, hlinex
 #import "@preview/quill:0.3.0": quantum-circuit, lstick, rstick, ctrl, targ
 
 == Decision Diagrams
@@ -10,14 +11,14 @@ The decision nodes represent an arbitrary decision based on an input value and m
 The terminal nodes represent output values and may not have outgoing edges.
 
 A @bdd is a specific kind of decision diagram, where there are two terminal nodes (0 and 1) and each decision node has two outgoing edges, depending solely on a single bit of an input value.
-@bdd[s] may be used to represent any boolean function.
+@bdd[s] may be used to represent any boolean function, as illustrated by the following example.
 
-#example[
+#example(breakable: true)[
   Example @bdd[s] implementing boolean functions with an arity of $2$ are show in @example_bdd_xor and @example_bdd_and.
 
   #figure(
     grid(
-      columns: (4fr, 1fr, 4fr),
+      columns: (4fr, 1fr, 4fr, 1fr, 4fr),
       align(
         horizon,
         canvas({
@@ -36,6 +37,21 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
           content((-1, 0.25), [$x_0$], anchor: "east")
           content((-1, -0.25), [$x_1$], anchor: "east")
         })
+      ),
+      align(horizon)[$<=>$],
+      align(
+        horizon,
+        tablex(
+          columns: (1cm, 1cm, 1cm),
+          auto-vlines: false,
+          auto-hlines: false,
+          [*$x_1$*], [*$x_2$*], vlinex(), [out],
+          hlinex(),
+          [0], [0], [0],
+          [0], [1], [1],
+          [1], [0], [1],
+          [1], [1], [0]
+        )
       ),
       align(horizon)[$<=>$],
       align(
@@ -61,7 +77,7 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
 
   #figure(
     grid(
-      columns: (4fr, 1fr, 4fr),
+      columns: (4fr, 1fr, 4fr, 1fr, 4fr),
       align(
         horizon,
         canvas({
@@ -76,6 +92,21 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
           content((-1, 0.25), [$x_0$], anchor: "east")
           content((-1, -0.25), [$x_1$], anchor: "east")
         })
+      ),
+      align(horizon)[$<=>$],
+      align(
+        horizon,
+        tablex(
+          columns: (1cm, 1cm, 1cm),
+          auto-vlines: false,
+          auto-hlines: false,
+          [*$x_1$*], [*$x_2$*], vlinex(), [out],
+          hlinex(),
+          [0], [0], [0],
+          [0], [1], [0],
+          [1], [0], [0],
+          [1], [1], [1]
+        )
       ),
       align(horizon)[$<=>$],
       align(
@@ -98,8 +129,17 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
 ]
 
 A quantum @dd in turn is a representation of the system matrix of a quantum circuit.
+Here the end nodes represent specific values in the matrix.
+The location of the value is determined by the outgoing edges of the previous nodes.
+At each layer $q_n$ of the graph, the matrix is recursively split up into four submatrices.
+The left to right, the edges represent a decent into the top left, top right, bottom left and bottom right corners of the matrix respectively.
+As the $0$ end node is usally the most common, it can be left out entirely and represented by unconnected edges instead.
+Additionally, the edges can be assigned weights to represent a multiplication of the entire matrix by a coefficient.
+Therefore, only a single end node with the value $1$ is needed in quantum @dd[s].
 
-#example[
+The following example demonstrates the relation between a quantum gate, its system matrix and the resulting @dd representation.
+
+#example(breakable: true)[
   #figure(
     grid(
       columns: (4fr, 1fr, 4fr, 1fr, 4fr),

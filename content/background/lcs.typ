@@ -1,15 +1,43 @@
 #import "@preview/fletcher:0.5.1": diagram, node, edge
 #import "@preview/gentle-clues:0.9.0": example
+#import "@preview/quill:0.3.0": quantum-circuit, lstick, rstick, ctrl, targ
 
 == The Longest Common Subsequence Problem
 The @lcs problem seeks to find the maximum length of a sequence of symbols common to two lists of symbols, where the order of symbols in their original lists is maintained.
-It is of interest to quantum circuit equivalence checking due to its close relation to the problem of finding the minimal edit script @myers1986diff.
+
+
+The @lcs problem is of interest to quantum circuit equivalence checking due to its close relation to the problem of finding the minimal edit script @myers1986diff.
+Edit scripts, colloquially known as "diffs", have various uses in information technology.
+Notably, diffs are used anywhere were it usually takes fewer resources to store the changes to data rather than the data itself, for instance in version control systems, file systems and backup systems.
 An edit script is a description of the steps needed to transform one sequence of symbols into another.
 It consists of three operations: Insert, remove and keep.
+As quantum circuits may be represented as, an edit script can be constructed that transforms one circuit into another using these operations.
 
 #example(breakable: true)[
+  To illustrate the concept of edit scripts, the circuits in @example_circuits will be used as example sequences.
+  For brevity, they will be represented by the strings "hxhy" and "yhhx".
+
+  #figure(
+    grid(
+      columns: (1fr, 1fr),
+      quantum-circuit(lstick($|q_0〉$), $H$, $X$, $H$, $Y$, 1),
+      quantum-circuit(lstick($|q_0〉$), $Y$, $H$, $H$, $X$, 1)
+    ),
+    caption: [Two quantum circuits that are to be compared using an edit script.]
+  ) <example_circuits>
+]
+
+There exist various solutions.
+One possible method is to use an edit graph that represents all possible edit scripts and finding the shortest path from one sequence to the other.
+
+#example(breakable: true)[
+  @example_edit_graph shows the entire edit graph of the sequences "hxhy" and "yhhx".
+  Any path along this graph from the top left vertex to the bottom right vertex is a valid edit script.
+  @example_path presents a possible path through the graph and the associated edit script.
+
   #figure(
     diagram(
+      spacing: 2em,
       node-stroke: .1em,
       node((0, 0), [hxhy], radius: 2em),
       node((1, 0), [xhy], radius: 2em),
@@ -150,3 +178,4 @@ It consists of three operations: Insert, remove and keep.
     caption: [One possible shortest path through the edit graph.]
   ) <example_path>
 ]
+
