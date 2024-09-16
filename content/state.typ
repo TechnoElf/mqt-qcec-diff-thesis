@@ -155,6 +155,10 @@ One approach involves the use of ZX-calculus, an alternative means of representi
 As with the @dd\-based approach, this representation can be used for equivalnce checking by constructing the two ZX diagram and checking if it is possible to transform one into the other @peham2022zx.
 Alternatively, the same more efficient approach of reducing the concatenation of the first circuit and the inverse of the second circuit to the identity may also be used with this method.
 
+Another method rewrites the quantum circuit as operations on a limited set of boolean states @berent2022sat.
+Using this encoding, it is possible to construct a so called miter circuit from two input circuits, which has a single output that is either 0 when the outputs of both circuits are the same ot 1 if this is not the case.
+By applying known SAT-solving techniques to this circuit, an efficient equivalence checker can thus be constructed by checking wether or not it is possible to produce a 1 at the output.
+
 Additionally, there are more efficient solutions for specific cases of the verification problem.
 For instance, in the case of proving non-equivalence, it is sufficient to find inputs that produce different outputs.
 In this case, it is usually more efficient to simulate such a case on both circuits and compare the outputs.
