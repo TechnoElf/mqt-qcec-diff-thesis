@@ -12,4 +12,6 @@
   (key: "qcec", short: "QCEC", long: "Quantum Circuit Equivalence Checker"),
   (key: "spsp", short: "SPSP", long: "single-pair shortest path"),
   (key: "sssp", short: "SSSP", long: "single-source shortest path"),
+  (key: "vqe", short: "VQE", long: "variational quantum eigensolver")
 ))
+

@@ -49,8 +49,10 @@
 #include "glossary.typ"
 
 #counter(heading).update(0)
-#bibliography("bibliography.bib", style: "mla", full: true)
+#bibliography("bibliography.bib", style: "ieee", full: true)
 
 //#pagebreak()
 //Total word count: #total-words
+
+#locate(loc => if calc.rem(loc.page(), 2) == 1 { pagebreak(to: "even") })
 
