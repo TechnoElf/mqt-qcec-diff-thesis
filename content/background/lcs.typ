@@ -4,14 +4,25 @@
 
 == The Longest Common Subsequence Problem
 The @lcs problem seeks to find the maximum length of a sequence of symbols common to two lists of symbols, where the order of symbols in their original lists is maintained.
-
-
-The @lcs problem is of interest to quantum circuit equivalence checking due to its close relation to the problem of finding the minimal edit script @myers1986diff.
+It is of interest to quantum circuit equivalence checking due to its close relation to the problem of finding the minimal edit script @myers1986diff.
 Edit scripts, colloquially known as "diffs", have various uses in information technology.
 Notably, diffs are used anywhere were it usually takes fewer resources to store the changes to data rather than the data itself, for instance in version control systems, file systems and backup systems.
 An edit script is a description of the steps needed to transform one sequence of symbols into another.
 It consists of three operations: Insert, remove and keep.
-As quantum circuits may be represented as, an edit script can be constructed that transforms one circuit into another using these operations.
+As quantum circuits may be represented as sequence of gates, an edit script can be constructed that transforms one circuit into another using these operations.
+
+The notation used for edit scripts in this thesis is as follows:
+- Insertion operations are represented by a `+` followed by the value to be inserted.
+- Deletion operations are represented by a `-` followed by the value to be deleted.
+- Keep operations (where no change is made the sequence) are represented by a `=` followed by the value.
+
+Additionally, a notation based on a list of tuples of two values is sometimes used.
+In this case, each tuple represents one or more operations in the edit script.
+The entries of the tuple represent counts in the first and second sequence respectively.
+As such, a tuple where there is a zero in either of these positions represents an insertion or deletion operation.
+A set of keep operations is therefore represented by a tuple where both entries have the same non-zero value.
+Note that the items operated on do not need to be stated explicitly, as they are known from their position in the sequence, making this a very compact description of an edit script.
+The significance of this notation to the application of @lcs algorithms to quantum circuit equivalence checking will be explored in the following sections.
 
 #example(breakable: true)[
   To illustrate the concept of edit scripts, the circuits in @example_circuits will be used as example sequences.
@@ -25,15 +36,23 @@ As quantum circuits may be represented as, an edit script can be constructed tha
     ),
     caption: [Two quantum circuits that are to be compared using an edit script.]
   ) <example_circuits>
+
+  The length of the @lcs for these strings is 2, representing the maximum number of keep operations that can be in a corresponding edit script.
+  The @lcs[s] themselves are "hx" and "hh".
+  One possible minimal edit script that contains the @lcs "hx" is `+y, =h, +h, =x, -h, -y` or $[(0, 1), (1, 1), (1, 0), (1, 1), (0, 2)]$ using the notation introduced in this thesis.
+  The length of the shortest edit script is therefore 6, which is equivalent to the @lcs length subtracted from the sum of the input sequences.
 ]
 
-There exist various solutions.
+There exist various solutions to the @lcs problem.
+The primary goal of these algorithms, however, is usually to produce an edit script, which only happens to solve the @lcs problem as well.
 One possible method is to use an edit graph that represents all possible edit scripts and finding the shortest path from one sequence to the other.
+While it is possible to use standard @sssp algorithms for this task, specialised approaches exist that make better use of the structure of the edit graph.
+Two such algorithms will be explored in the following sections.
 
 #example(breakable: true)[
   @example_edit_graph shows the entire edit graph of the sequences "hxhy" and "yhhx".
   Any path along this graph from the top left vertex to the bottom right vertex is a valid edit script.
-  @example_path presents a possible path through the graph and the associated edit script.
+  @example_path presents a possible shortest path through the graph and the associated edit script.
 
   #figure(
     diagram(
@@ -117,6 +136,8 @@ One possible method is to use an edit graph that represents all possible edit sc
     caption: [An edit graph.]
   ) <example_edit_graph>
 
+  Rewriting the edit script in @example_path in the compact notation would result in the list $[(0, 2), (2, 2), (2, 0)]$
+
   #figure(
     diagram(
       node-stroke: .1em,
@@ -129,9 +150,9 @@ One possible method is to use an edit graph that represents all possible edit sc
       edge((3, 0), (4, 1), "->"),
       edge((0, 1), (1, 2), "->"),
       edge((2, 1), (3, 2), "->"),
-      edge((0, 2), (1, 3), "->", [keep h], stroke: 2pt),
+      edge((0, 2), (1, 3), "->", [`=h`], stroke: 2pt),
       edge((2, 2), (3, 3), "->"),
-      edge((1, 3), (2, 4), "->", [keep x], stroke: 2pt),
+      edge((1, 3), (2, 4), "->", [`=x`], stroke: 2pt),
 
       edge((0, 0), (1, 0), "->"),
       edge((1, 0), (2, 0), "->"),
@@ -151,11 +172,11 @@ One possible method is to use an edit graph that represents all possible edit sc
       edge((3, 3), (4, 3), "->"),
       edge((0, 4), (1, 4), "->"),
       edge((1, 4), (2, 4), "->"),
-      edge((2, 4), (3, 4), "->", [-h], stroke: 2pt),
-      edge((3, 4), (4, 4), "->", [-y], stroke: 2pt),
+      edge((2, 4), (3, 4), "->", [`-h`], stroke: 2pt),
+      edge((3, 4), (4, 4), "->", [`-y`], stroke: 2pt),
 
-      edge((0, 0), (0, 1), "->", [+y], stroke: 2pt),
-      edge((0, 1), (0, 2), "->", [+h], stroke: 2pt),
+      edge((0, 0), (0, 1), "->", [`+y`], stroke: 2pt),
+      edge((0, 1), (0, 2), "->", [`+h`], stroke: 2pt),
       edge((0, 2), (0, 3), "->"),
       edge((0, 3), (0, 4), "->"),
       edge((1, 0), (1, 1), "->"),

@@ -23,3 +23,11 @@ This approach thereby exploits the structural similarity that is present in quan
 Additionally, a heuristic is developed that can discern, wether or not this new approach can reduce the run time of the state-of-the-art flow for any given pair of circuits.
 When combined, these new approach results in run time improvements of up to $59%$ in some cases, with an average improvement of $7%$.
 
+The remainder of the thesis is structured as follows:
+In section 2, the concepts required to understand the developed methods will be elaborated.
+Section 3 will then present the current state of quantum circuit verification schemes.
+Following this, section 4 will discuss the algorithms themselves and their application to @qcec.
+Next, section 5 will present the results of applying the new equivalence checking methodology to real-world problems and detail the procedure used to acquire them.
+Section 6 will discuss the results and draw conclusions from them.
+Finally, section 7 will judge the impact of this work as a whole and suggest future pathways of exploration.
+
