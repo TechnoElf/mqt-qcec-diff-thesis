@@ -745,7 +745,7 @@ The following example illustrates these concepts graphically.
   #figure(
     grid(
       columns: (4fr, 2fr, 4fr, 2fr, 4fr),
-      align(horizon)[`+ y` \ `+ h` \ `keep h` \ `keep x` \ `- h` \ `- y`],
+      align(horizon)[`+y` \ `+h` \ `=h` \ `=x` \ `-h` \ `-y`],
       align(horizon)[$->$ \ convert],
       align(horizon)[$(0, 1) \ (0, 1) \ (1, 1) \ (1, 1) \ (1, 0) \ (1, 0)$],
       align(horizon)[$->$ \ simplify],

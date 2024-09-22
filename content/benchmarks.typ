@@ -159,7 +159,7 @@ It was compiled using clang 17.0.6, cmake 3.29.2 and ninja 1.11.1.
 cmake was configured to build the application in release mode and without tests or python bindings.
 
 The application was then run on a virtual machine for each benchmarking and @qcec configuration sequentially.
-The virtual machine was configured with 32 AMD EPYC 7H12 cores and 64GB of RAM.
+The virtual machine was configured with 32 AMD EPYC 7H12 cores and 64GiB of RAM.
 It ran NixOS 23.11 as the operating system on top of an ESXi hypervisor.
 
 Initially, the application was locked to a single core using the taskset utility in an attempt to prevent the Linux scheduler from interfering with the benchmark.

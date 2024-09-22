@@ -1,23 +1,26 @@
 #import "@preview/gentle-clues:0.9.0": example, code
 
 == Post-processing of Edit Scripts
-Having, both the implementation of the diff algorithms and a suitable benchmarking framework complete, initial tests of the complete equivalence checking flow were performed.
-This, however, revealed a significant issue with the approach as implemented thus far.
-Naively applying gates based on the outputs of the diff algorithm generally resultet in a worse overall runtime for most test cases compared to the state of the art application scheme.
+Using the implementation of the diff algorithms and the benchmarking framework, initial tests of the complete equivalence checking flow could be performed.
+Naively applying gates based on the outputs of the diff algorithm generally results in a worse overall runtime for most test cases compared to the state of the art application scheme, however.
 
-Comparing the output sequences of the proportional application scheme to that of the diff application scheme revealed a few possible reasons for this performance regression.
+Comparing the output sequences of the proportional application scheme to that of the diff application scheme reveals a few possible reasons for this performance regression.
+For instance, the diff alogrithms tend to produce large blocks of insertion or deletion operations.
+This makes sense when the goal is to produce a human-readable edit script, however, this property is counterproductive for the equivalence checking flow.
+A good application schemes ideally interleaves corresponding gates so that the size of the @dd remains minimal.
 
-Based on these observations, a series of post-processing steps were developed in an attempt to alleviate this issue.
-An alternative approach would have been to develop a new diff algorithm that produces edit scripts that are more suitable to equivalence checking, however post-processing proved to be effective and efficient enough to produce the desired results.
+Based on these observations, a series of post-processing steps are introduced in an attempt to alleviate this issue.
+An alternative approach would have been to develop a new diff algorithm that produces edit scripts that are more suitable to equivalence checking, however post-processing proves to be effective and efficient enough to produce the desired results.
 
-This was possible due to the unique properties of the alternating equivalence checker based on @dd[s].
+This is possible due to the unique properties of the alternating equivalence checker based on @dd[s].
 The correctness of the result only depends on all gates from both circuits being applied in the right order.
 The exact sequence in which left and right gates are applied is irrelevant.
 It is therefore possible to use such heuristics to modify the application sequence.
 
 The post-proccessing steps are explained in the next sections, followed by a discussion of the final sequence that was used to achieve the best performance.
 
-=== Removing Empty Operations
+*Removing Empty Operations*
+
 This step simply removes any operation that applies neither left nor right gates.
 While this shouldn't have a great impact on performance, it does reduce the memory footprint of the array.
 
@@ -35,7 +38,8 @@ While this shouldn't have a great impact on performance, it does reduce the memo
   ) <example_remove_empty_ops>
 ]
 
-=== Merging Same Operations
+*Merging Same Operations*
+
 The edit script sometimes contained consecutive operations that apply gates from the same side.
 This makes sense for a normal edit script, where operations may usually only operate on a single element, however, this restriction does not apply here.
 The alternating equivalence checker can apply any number of gates in a single step.
@@ -57,7 +61,8 @@ It may therefore make sense to combine these operations wherever possible to red
   ) <example_merge_same_ops>
 ]
 
-=== Swapping Left and Right Operations
+*Swapping Left and Right Operations*
+
 The idea behind this post-processing step stemmed from the uncertainty of the way @mqt @qcec handles the left and right application of gates.
 If this was opposite to the expected direction, swapping the insertion and deletion operations should improve the runtime.
 Applying this step, however, resulted in consistently worse runtimes.
@@ -80,7 +85,8 @@ It was therefore not used in the final post processing sequence.
   ) <example_swap_ops>
 ]
 
-=== Splitting Large Operations
+*Splitting Large Operations*
+
 This step essentially implements the inverse of the "merging same" step.
 It aims to split up large operations.
 While splitting application operations like this should not affect the runtime, this step was used to develop other, more effective post-processing methods.
@@ -104,7 +110,8 @@ The second implementation calculated the number of splits needed to reduce the s
   ) <example_split_ops>
 ]
 
-=== Merging Left and Right Operations
+*Merging Left and Right Operations*
+
 When the @dd\-based equivalence checker is given an operation with both left and right gates (such as a "keep" operation in the diff), it applies the gates from either side sequentially.
 This is identical to having two consecutive operations that apply gates from opposite directions.
 The aim of this step is therefore to reduce the size of the edit script by combining such operations that would result in the same application order anyway.
@@ -124,7 +131,8 @@ The aim of this step is therefore to reduce the size of the edit script by combi
   ) <example_merge_left_right_ops>
 ]
 
-=== Interleaving Left and Right Operations
+*Interleaving Left and Right Operations*
+
 This is the post processing step that had the most impact on the performance of the application scheme.
 It aims to split up operations, similar to the "splitting large operations" step, however, it does so only where it can interleave left and right application operations
 Interleaving the operations this way is analogous to creating a diagonal step pattern in the edit graph.
@@ -145,7 +153,8 @@ This shape is exactly the path that produces the optimal sequence of application
   ) <example_interleave_left_right_ops>
 ]
 
-=== Final Postprocessing Steps
+*Final Postprocessing Steps*
+
 Various combinations of the procedures described in the previous sections were implemented in an attempt to reduce the runtime.
 Most sequences either had no discernable effect or worsened the results.
 

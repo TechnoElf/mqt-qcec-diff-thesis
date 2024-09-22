@@ -1,26 +1,31 @@
 == QCEC Benchmarking Tool
-As @qcec doesn’t have built-in benchmarks, a benchmarking tool was developed to test different configurations on various circuit pairs. 
-This was necessary to show the quantitative improvement gained by using different application schemes.
+Besides testing the newly developed approaches for correctness, possible performance regressions should be monitored as well.
+@qcec doesn’t have built-in benchmarks, however.
+For this purpose, a benchmarking tool was therefore developed to test different configurations of the equivalence checker on various circuit pairs. 
+This is necessary to show the quantitative improvement gained by using different application schemes.
 Two different approaches were implemented, which will be discussed in the following sections.
 
 === Google Benchmark
 The Google Benchmark framework was initially used to develop benchmarks for @mqt @qcec.
-
 The benchmarks generally had the following procedure.
 First, the equivalence checker was configured.
 The application scheme was set to either the proportional or diff approach according to the benchmark definition.
 Next, the circuits were loaded according to the benchmark definition.
 Finally, the equivalence checking run was carried out in a loop by the benchmarking framework.
 
-To generate the quantum circuits for the benchmark instances, @mqt bench was used @quetschlich2023mqtbench.
-A subset of the available benchmarks was chosen for initial tests, namely the Deutsch-Jozsa algorithm, Grover's algorithm and Shor's algorithm.
-These were each compiled using Qiskit for the IBM native gate set and the IBM Washingtom target device.
-The qubit count was set to 8 for initial tests.
-These benchmarks were manually downloaded from the @mqt bench instance hosted by the Chair for Design Automation and subsequently implemented in the @qcec codebase.
+To generate the quantum circuits for the benchmark instances, @mqt Bench was used @quetschlich2023mqtbench.
+A subset of the available benchmarks was chosen for initial tests, namely the Deutsch-Jozsa algorithm @deutsch1992quantum, Grover's algorithm @grover1996db and Shor's algorithm @shor1997discretelog.
+The qubit count was set to 8 for initial testing.
 
-It was quickly found that this approach doesn't scale very well, however.
+These circuits were each compiled using Qiskit for the IBM native gate set and the IBM Eagle @qpu target device (called IBM Washington in @mqt Bench).
+This @qpu has a total of 127 qubits and natively supports the $X$, square root of $x$, rotate $z$ and echoed cross-resonance gates @chow2021eagle.
+Its gates are connected using a heavy-hexagonal layout.
+While other @qpu[s] were not tested in this study, these should yield similar results as the compilation process works in the same manner on these platforms.
+
+These benchmarks were manually downloaded from the @mqt Bench instance hosted by the Chair for Design Automation and subsequently implemented in the @qcec codebase.
+This approach doesn't scale very well, however.
 Each test instance takes roughly 30 lines of C++ code and the corresponding circuit must be downloaded by the user as there are too many circuits to reasonably add to the git repository.
-Considering that @mqt bench currently has 28 different quantum circuits, most of which have a variable number of qubits, this would be unreasonable to implement by han @quetschlich2023mqtbench.
+Considering that @mqt Bench currently has 28 different quantum circuits, most of which have a variable number of qubits, this would be unreasonable to implement by hand @quetschlich2023mqtbench.
 Furthermore, there are 36 permutations that can be compared for each benchmark instance as each level of specification and optimisation can be compared to all higher levels of specification and optimisation.
 Additionally, it would certainly be interesting to test different combinations of compilers and targets in future work, which would be very difficult with this approach.
 
@@ -41,11 +46,11 @@ These configuration files can be written by hand much more quickly than the Goog
 Additionally, it was possible to script the creation of these configuration files using Python to allow programmatic generation of benchmark instances.
 This approach was used to generate the final benchmark configuration with 190 instances.
 
-Furthermore, unlike Google benchmark, this framework doesn't require manually downloading the circuits from @mqt bench.
-@qcec bench automatically builds the required files using the @mqt bench python package if they haven't been built yet.
+Furthermore, unlike Google benchmark, this framework doesn't require manually downloading the circuits from @mqt Bench.
+@qcec bench automatically builds the required files using the @mqt Bench python package if they haven't been built yet.
 It also caches the results so future runs of the benchmark can be started more quickly.
 
-Google Benchmark has a convenient feature to reduce the noise of measurements that was initially lacking from @qcec bench.
+Google Benchmark has a convenient feature to reduce the noise of measurements that was initially lacking from @qcec Bench.
 When the runtime of the benchmark is very short, it will automatically increase the run count to calculate a more precise average.
-This technique was also adopted in @qcec bench as the variance for some of the smaller benchmark instances was too high to allow proper interpretation of the results.
+This technique was also adopted in @qcec Bench as the variance for some of the smaller benchmark instances was too high to allow proper interpretation of the results.
 
