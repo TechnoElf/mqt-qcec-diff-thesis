@@ -4,22 +4,20 @@
 
 == Algorithms
 This section provides an overview of the implemented diff algorithms.
-While some algorithms where only implemented much later into development, it is beneficial to discuss these algorithms now, in order to better compare them to each other and to reason about later implementation choices.
-
 Initially, research was done to determine suitable algorithms for the task.
 A variety of algorithms was found, but only a limited representative set was chosen for implementation due to their similarity and the given time constraints.
-The chosen algorithms are: Djikstra's algorithm (for its simplicity), Myers' algorithm (for its ubiquity) and the patience algorithm (for its relative novelty).
+The chosen algorithms are: Djikstra's algorithm (for its simplicity) @djikstra1959shortest, Myers' algorithm (for its ubiquity) @myers1986diff and the patience algorithm (for its relative novelty) @cohen2010patience.
 
 === Djikstra's Algorithm
-Djikstra's algorithm is an @sssp algorithm.
-This means that it solves the problem of finding the shortest distance from a node of a graph to any other node @djikstra1959shortest.
+Djikstra's algorithm is an @sssp algorithm @djikstra1959shortest.
+This means that it solves the problem of finding the shortest distance from a node of a graph to any other node.
 It can thus be trivially applied as a diff algorithm by finding the shortest path accross an edit graph.
 @djikstras_algorithm_abstract presents a slightly modified form of the original algorithm that more closely matches modern programming languages.
 
 #figure(
   block(
     pseudocode-list[
-      + *def* $"djiksta"(G, s, e)$
+      + *def* $"djikstra"(G, s, e)$
         + create a list of remaining nodes $N$ containing all nodes in $G$
         + set the distance for all nodes in $N$ to infinity
         + set the parent for all nodes in $N$ to none
@@ -44,6 +42,12 @@ It can thus be trivially applied as a diff algorithm by finding the shortest pat
   caption: [Djikstra's algorithm.]
 ) <djikstras_algorithm_abstract>
 
+Essentially, Djikstra's algorithm functions by greedily following the current shortest path from a starting node until the end node of the graph is reached.
+To implement this, a set $N$ of all unvisited nodes is created and each node assigned a path length (where unvisited or unreachable nodes have a distance of infinity).
+The starting node has its distance set to 0 to ensure it will be picked first.
+In each iteration, the node with the shortest path is then removed from the set $N$ and the distance of all neighbouring nodes is updated.
+This is performed repeatedly until the end node is found.
+
 In this pseudocode implementation, the inner loop corresponds to Step 1 and the outer loop to Step 2 from the original description @djikstra1959shortest.
 The list $N$ corresponds to sets $B$ and $C$ and the nodes removed from $N$ correspond to the set $A$.
 
@@ -56,7 +60,7 @@ The implementation is thus as follows:
 #figure(
   block(
     pseudocode-list[
-      + *def* $"djiksta"(v)$
+      + *def* $"djikstra_modified"(v)$
         + create a list of remaining nodes containing only $v$
         + *while* the list of remaining nodes is not empty
           + take the lowest element from the list of remaining nodes
@@ -148,11 +152,11 @@ The implementation is thus as follows:
   ) <example_djikstra>
 ]
 
-At this point, it was considered wether to implement another @spsp algorithm such as A\*.
+It was also considered wether to implement another @spsp algorithm such as A\* @hart1968astar.
 This was, however, deemed unnecessary, as there exist better solutions tailored specifically to edit graphs.
 
 === Myers' Algorithm
-Myers' algorithm in its original form only solves the @lcs problem without producing an edit script for transorming one input sequence into the other @myers1986diff.
+Myers' algorithm in its original form only solves the @lcs problem without producing an edit script for transforming one input sequence into the other @myers1986diff.
 The version presented here has been extended to provide this functionality.
 It does so by using the edit graph traversal of the original algorithm to find a point that must be part of the shortest edit script and then recursively applying the algorithm to the two remaining subgraphs.
 @myers_algorithm_abstract presents the pseudocode for this procedure.
@@ -276,7 +280,7 @@ The following example visually demonstrates how the edit graph is split up by th
 
 This algorithm was implemented in both Kaleidoscope and @qcec.
 As such, the implementation was extended and reworked several times to optimise it for quantum circuit equivalence checking.
-The discussion on diff visualisation in the following sections will explore some of the improvements made to the algorithm.
+The discussion on diff visualisation in the following sections explores some of the improvements made to the algorithm.
 The version presented here is the final version that was integrated into @qcec.
 
 #code(breakable: true)[
@@ -405,9 +409,9 @@ Specifically, it seeks to find elements that occur only once in each sequence an
 
 Unlike the Myers' algorithm, the patience algorithm does not, in fact, solve the @lcs problem.
 Instead, it only aims to produce valid edit scripts, that are qualitatively superior for human use.
-It was designed as an alternative to the Myers' algorithm for the version control software `git` with the aim of generating more sensible diffs when code is refactored.
+It was designed as an alternative to the Myers' algorithm for the version control software `git` with the aim of generating more sensible diffs when code is refactored @cohen2010patience.
 For this purpose it is simply not necessary and sometimes even detrimental to produce an optimal edit script.
-Wether or not this approach also positively affects the performance of the equivalence checking process will be explored in this thesis.
+Whether or not this approach also positively affects the performance of the equivalence checking process is explored in the benchmark results presented in this thesis.
 
 An abstract description of the algorithm is given in @patience_algorithm_abstract.
 
@@ -600,12 +604,9 @@ The following example illustrates the functionality of the patience diff algorit
   For the strings "hxhy" and "yhhx" the final edit script would thus be $[$`-h`, `-x`, `-h`, `keep y`, `+h`, `+h`, `+x`$]$.
   This is clearly not a solution to the @lcs problem, however, as discussed, the patience algorithm does not actually seek to fully solve this problem.
   It is only guaranteed to produce valid edit scripts, not optimal ones.
-  The effect of this will be investigated in later sections.
+  The effect of this will be investigated using the benchmark results produced in this work.
 ]
 
-This algorithm was only implemented in @qcec.
-Since it requires the use of another diff algorithm as a fallback, the Myers' algorithm had to be implemented first anyway.
-Due to time constraints, is was therefore deemed unneccessary to implement it in Kaleidoscope.
 The following code block discusses the final implementation that was created for @qcec.
 
 #code(breakable: true)[
@@ -715,6 +716,9 @@ The following code block discusses the final implementation that was created for
 === Adaptation of Diff Algorithms for QCEC
 All of these algorithms had a common issue, however.
 For a diff algorithm to be useful as an application scheme for @qcec, it must output a list of pairs of numbers describing the quantity of gates to apply from either circuit.
+As demonstrated in the background and state of the art sections, the @dd\-based equivalence checker functions by alternating between applying a certain number of gates from the first circuit and the second circuit until all gates have been added and the identity @dd is once again produced.
+A heuristic approach therefore needs to be able to determine how many gates to apply from either circuit in a single step.
+
 This is contrary to the typical requirement of an edit script that describes insert, remove and keep operations.
 These operations, however, correspond directly to the application:
 - A removal operation in the edit script is analogous to the application of a gate from the left of the first circuit, expanding the @dd.
