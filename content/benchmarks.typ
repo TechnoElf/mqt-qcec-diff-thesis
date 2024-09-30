@@ -160,7 +160,7 @@ There are therefore 5 different versions of each circuit:
 - Mapped representation with no optimisation
 - Mapped representation with full optimisation
 
-As any two optimisation stages can be compared, this results in $binom(2, 5) = 5!/(2!(5-2)!) = 10$ benchmark instances per circuit.
+As any two optimisation stages can be compared, this results in $binom(5, 2) = 5!/(2!(5-2)!) = 10$ benchmark instances per circuit.
 This means that there are $10 dot 3 = 30$ benchmarks per circuit type and $30 dot 5 = 150$ benchmarks in total for each application scheme.
 
 == Environment
