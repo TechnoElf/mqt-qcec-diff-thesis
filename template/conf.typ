@@ -68,6 +68,12 @@
     ]
   })
 
+  show figure: it => {
+    v(0.5em)
+    it
+    v(0.5em)
+  }
+
   set page(
     paper: "a4",
     margin: (

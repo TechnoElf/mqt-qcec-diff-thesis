@@ -1,4 +1,4 @@
-#import "@preview/cetz:0.2.2": canvas, plot, chart, styles, draw
+#import "@preview/cetz:0.2.2": canvas, plot, chart, styles, draw, palette
 #import "@preview/tablex:0.0.8": tablex
 #import "@preview/unify:0.6.0": qty
 
@@ -141,22 +141,32 @@
 }
 
 = Benchmarks
+This section presents the results of applying the implemented @qcec application scheme on practical problems.
+The focus herein lies on the performance in terms of run time of the methodology compared to previous approaches, as the accuracy is already guaranteed by the @dd\-based equivalnce checking method.
+First, the test cases used will be listed and justified.
+Next, the environment which was used to perform the benchmarks will be elaborated.
+Finally, the quantitative results will be presented and interpreted.
+
 == Test Cases
-To generate test cases for the application schemes, @mqt Bench was used @quetschlich2023mqtbench.
+To generate test cases for the application schemes discussed in the implementation section, @mqt Bench was used @quetschlich2023mqtbench.
 A subset of the available circuits was generated using the python package of @mqt Bench at version 1.1.3.
-Implementations of the Deutsch-Jozsa, Portfolio Optimization with QAOA, Portfolio Optimization with VQE, Quantum Fourier Transformation and Quantum Neural Network benchmarks were generated using 4, 8 and 16 qubits.
-Each implementation was compiled using Qiskit for the IBM Washington target with optimisation levels 0 and 3.
-There are therefore 5 different versions of each circuit, resulting in $sum_(n=1)^(5-1) n = 10$ benchmark instances per circuit:
+Implementations of the Deutsch-Jozsa @deutsch1992quantum, Portfolio Optimization with QAOA @hodson2019qaoa, Portfolio Optimization with VQE @peruzzo2014vqe, Quantum Fourier Transformation @coppersmith2002qft, and Quantum Neural Network @purushothaman1997qnn benchmarks were generated using 4, 8, and 16 qubits.
+Each implementation was compiled using Qiskit for the IBM Eagle target (named IBM Washington in @mqt Bench) @chow2021eagle with optimisation levels 0 and 3.
+There are therefore 5 different versions of each circuit:
+
 - Target independent representation
 - Native gates representation with no optimisation
 - Native gates representation with full optimisation
 - Mapped representation with no optimisation
 - Mapped representation with full optimisation
 
+As any two optimisation stages can be compared, this results in $binom(2, 5) = 5!/(2!(5-2)!) = 10$ benchmark instances per circuit.
+This means that there are $10 dot 3 = 30$ benchmarks per circuit type and $30 dot 5 = 150$ benchmarks in total for each application scheme.
+
 == Environment
 The following data was collected using @mqt @qcec Bench, the benchmarking tool developed in the course of this work.
-It was compiled using clang 17.0.6, cmake 3.29.2 and ninja 1.11.1.
-cmake was configured to build the application in release mode and without tests or python bindings.
+It was compiled using `clang` 17.0.6, `cmake` 3.29.2 and `ninja` 1.11.1.
+`cmake` was configured to build the application in release mode and without tests or python bindings.
 
 The application was then run on a virtual machine for each benchmarking and @qcec configuration sequentially.
 The virtual machine was configured with 32 AMD EPYC 7H12 cores and 64GiB of RAM.
@@ -198,13 +208,14 @@ The proportional application scheme does, however, appear to have a slight advan
       mode: "clustered",
       label-key: 0,
       value-key: range(1, 7),
-      size: (14, 6),
+      size: (14, 5),
       x-label: [Run Time (s)],
       x-tick: 45,
       y-label: [Count],
-      y-max: 40,
+      y-max: 22,
       y-min: 0,
       legend: "legend.inner-north-east",
+      bar-style: i => { if i >= 1 { palette.red(i) } else { palette.cyan(i) } },
       labels: ([Proportional], [Myers' Diff (Reversed, Processed)], [Myers' Diff (Processed)], [Myers' Diff (Reversed)], [Myers' Diff], [Patience Diff]),
       results-r1-b5q16-hist.bins-mu.zip(
         results-r1-b5q16-hist.cprop.mu,
@@ -274,7 +285,8 @@ On the other hand, the processed variants performed better than their plain coun
 This shows that the approach of reversing the second circuit before running the diff algorithm is clearly wrong, but processing the edit script to make it more suitable for use in the equivalnce checker tends to work in most cases.
 
 By comparing the run time improvement to various independent variables, a scheme was developed to determine wether or not applying the diff application scheme would result in a positive improvement.
-The key variable for this scheme turned out to be the equivalence rate of the two circuits.
+Properties such as the circuit length in terms of gate count, the number of qubits in either circuit, and the @dd node count were considered.
+However, the key variable for this scheme turned out to be the equivalence rate of the two circuits.
 It was determined by counting the number of keep operations in the edit script and dividing it by the total size of the circuits.
 In @results_equivalence_rate, the results of each variant are plotted dependent on their respective equivalence rates.
 
