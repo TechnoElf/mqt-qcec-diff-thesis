@@ -177,7 +177,7 @@ This significantly reduced the performance of the benchmarking application, howe
 It was determined that the variance due to context switches was low enough, so this restriction was removed.
 
 @qcec itself was configured as follows:
-- The numerical tolerance is set to the builtin epsilon (1024 times the smallest possible value of a double-precision floating-point value according to IEEE 754)
+- The numerical tolerance is set to the built-in epsilon (1024 times the smallest possible value of a double-precision floating-point value according to IEEE 754)
 - Parallel execution is disabled.
 - The alternating checker is enabled. All other checkers are disabled.
 - All optimisations are disabled.

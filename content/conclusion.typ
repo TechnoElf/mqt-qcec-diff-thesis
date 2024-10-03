@@ -14,10 +14,10 @@ The extensive exploration carried out in this work shows both the possible advan
 While significant speed ups are demonstrated, many of the explored approaches tend to cause regressions in the run time of the equivalence checking procedure.
 
 Specifically, the proposed application scheme based on a processed edit script produced by the Myers' algorithm can speed up equivalence checking by almost 60% in the right circumstances.
-In many other cases, however, it fails to provide any meaningful speedup or even reduces the speed of computation by a factor of up to 400%.
+In many other cases, however, it fails to provide any meaningful speed-up or even reduces the speed of computation by a factor of up to 400%.
 While there is no apparent correlation between the easily analysable properties of the circuits and the run time improvement of using a diff-based application scheme, a heuristic based on the gate equivalence rate of the two circuits manages to filter out most bad instances.
 
-The culmination of this work is an application scheme that can be applied selectively to accomplish an average speedup of 7.09% compared to the state-of-the-art application scheme.
+The culmination of this work is an application scheme that can be applied selectively to accomplish an average speed-up of 7.09% compared to the state-of-the-art application scheme.
 Additionally, the developed open-source tooling will certainly prove useful to further research on quantum circuit verification.
 @mqt @qcec Bench is especially significant as it greatly simplifies further large-scale tests of methodologies in @qcec.
 
