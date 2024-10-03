@@ -153,7 +153,7 @@ The following example illustrates the functionality of each of these schemes.
 Besides reducing a @dd to the identity, alternative methods for verifying equivalent functionality of quantum circuits exist.
 One approach involves the use of ZX-calculus, an alternative means of representing quantum circuits @kissinger2020pyzx.
 As with the @dd\-based approach, this representation can be used for equivalence checking by constructing the two ZX diagram and checking if it is possible to transform one into the other @peham2022zx.
-Alternatively, the same more efficient approach of reducing the concatenation of the first circuit and the inverse of the second circuit to the identity may also be used with this method.
+Alternatively, the same more efficient approach of reducing the concatenation of the first circuit and the inverse of the second circuit to the identity may also be used with this method @duncan2020zx.
 
 Another method rewrites the quantum circuit as operations on a limited set of boolean states @berent2022sat.
 Using this encoding, it is possible to construct a so called miter circuit from two input circuits, which has a single output that is either 0 when the outputs of both circuits are the same and 1 if this is not the case.

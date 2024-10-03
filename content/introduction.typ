@@ -4,8 +4,8 @@ It promises to enable certain kinds of calculations and algorithms that were pre
 The technology enables a kind of probabilistic approach to computation that allows an extremely efficient parallelisation of certain algorithms.
 
 One key application of quantum computers is their potential use in chemistry due to their inherent ability to simulate quantum systems @mcardle2020chem.
-For instance, a circuit structure known as a @vqe is able to solve for the ground state of a given physical quantum system, a task that would be classically impossible within a reasonable time frame. 
-Similar techniques can be applied to various optimisation problems in other fields.
+For instance, a circuit structure known as a @vqe is able to solve for the ground state of a given physical quantum system, a task that would be classically impossible within a reasonable time frame @moll2018vqe @peruzzo2014vqe. 
+Similar techniques can be applied to various optimisation problems in other fields @abrams1999eigen @harrow2009linear.
 
 A core problem in the field of quantum computing is the transformation of an abstract algorithm to sequence of operations to be executed on real quantum computing hardware.
 Various factors must be considered in this process, such as the available types of operations and the geometry of the quantum computer.
@@ -14,8 +14,8 @@ A plethora of software tools exist for this purpose, notably the @mqt @wille2024
 
 As these "quantum compilers" become more intricate and more optimisation techniques are employed, it becomes harder to verify that their output implements the same functionality as the original circuit.
 This makes the development of new compilation methodologies increasingly difficult, as the reliability becomes difficult to prove numerically.
-To verify the functionality of a compiled quantum circuit, it is therefore necessary to check its equivalence to the original algorithm automatically.
-@mqt provides a tool named @qcec for this purpose.
+To verify the functionality of a compiled quantum circuit, it is therefore necessary to check its equivalence to the original algorithm automatically @viamontes2007equivalence.
+@mqt provides a tool named @qcec for this purpose @burgholzer2020ecqiskit.
 
 This work extends @qcec with a novel variation of the existing verification flow based on @dd[s].
 Specifically, an application scheme is developed for the alternating @dd equivalence checker based on algorithms originally intended for solving the @lcs problem (so called "diff" algorithms).

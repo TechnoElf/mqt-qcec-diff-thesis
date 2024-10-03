@@ -158,7 +158,7 @@ This was, however, deemed unnecessary, as there exist better solutions tailored 
 === Myers' Algorithm
 Myers' algorithm in its original form only solves the @lcs problem without producing an edit script for transforming one input sequence into the other @myers1986diff.
 The version presented here has been extended to provide this functionality.
-It does so by using the edit graph traversal of the original algorithm to find a point that must be part of the shortest edit script and then recursively applying the algorithm to the two remaining sub graphs.
+It does so by using the edit graph traversal of the original algorithm to find a point that must be part of the shortest edit script and then recursively applying the algorithm to the two remaining sub graphs @elder2017myers.
 @myers_algorithm_abstract presents the pseudocode for this procedure.
 
 #figure(
@@ -441,7 +441,7 @@ An abstract description of the algorithm is given in @patience_algorithm_abstrac
 ) <patience_algorithm_abstract>
 
 While most of these steps are trivial, the patience sort procedure requires some elaboration.
-This sorting algorithm finds the longest possible sequence of matching element pairs in the two sequences, where the indices in both are monotonically increasing.
+This sorting algorithm finds the longest possible sequence of matching element pairs in the two sequences, where the indices in both are monotonically increasing @alfedenzo2008patience.
 It does this by creating a list of piles of elements that grow vertically, and where horizontal connections represent valid increasing sequences.
 @patience_sort_abstract provides additional details on the algorithm.
 
