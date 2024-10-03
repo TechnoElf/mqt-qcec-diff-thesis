@@ -54,5 +54,6 @@
 //#pagebreak()
 //Total word count: #total-words
 
+#set page(footer: [])
 #locate(loc => if calc.rem(loc.page(), 2) == 1 { pagebreak(to: "even") })
 

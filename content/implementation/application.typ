@@ -69,7 +69,7 @@ This approach is sound as the application scheme instance is also owned by the `
 
 === Tests
 Testing of software is vital to ensure its functionality while being maintained by multiple people over long periods of time.
-@qcec provides facilites for automating this process and indeed performs these checks on each new contribution to the code.
+@qcec provides facilities for automating this process and indeed performs these checks on each new contribution to the code.
 To ensure the functionality of the diff application scheme in the same manner, tests were added covering these new code paths.
 
 Specifically, the `SimpleCircuitIdentitiesTest` was extended with a diff-based configuration.
