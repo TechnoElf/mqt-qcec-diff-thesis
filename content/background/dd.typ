@@ -5,7 +5,7 @@
 #import "@preview/quill:0.3.0": quantum-circuit, lstick, rstick, ctrl, targ
 
 == Decision Diagrams
-Decision diagrams in general are directed acyclical graphs, that may be used to express control flow through a series of conditions.
+Decision diagrams in general are a type of @dag, that may be used to express control flow through a series of conditions.
 It consists of a set of decision nodes and terminal nodes.
 The decision nodes represent an arbitrary decision based on an input value and may thus have any number of outgoing edges.
 The terminal nodes represent output values and may not have outgoing edges.
@@ -131,9 +131,9 @@ A @bdd is a specific kind of decision diagram, where there are two terminal node
 A quantum @dd in turn is a representation of the system matrix of a quantum circuit.
 Here the end nodes represent specific values in the matrix.
 The location of the value is determined by the outgoing edges of the previous nodes.
-At each layer $q_n$ of the graph, the matrix is recursively split up into four submatrices.
+At each layer $q_n$ of the graph, the matrix is recursively split up into four sub matrices.
 The left to right, the edges represent a decent into the top left, top right, bottom left and bottom right corners of the matrix respectively.
-As the $0$ end node is usally the most common, it can be left out entirely and represented by unconnected edges instead.
+As the $0$ end node is usually the most common, it can be left out entirely and represented by unconnected edges instead.
 Additionally, the edges can be assigned weights to represent a multiplication of the entire matrix by a coefficient.
 Therefore, only a single end node with the value $1$ is needed in quantum @dd[s].
 

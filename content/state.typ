@@ -9,7 +9,7 @@ Two broad categories are considered here: Those that use the same @dd\-based equ
 While @dd\-based equivalence checking is currently the most performant, it is worth noting that there are other approaches as well that may benefit from the ideas developed in this work @burgholzer2021ec.
 
 == Quantum Decision Diagram Equivalence Verification
-The state-of-the-art quantum circuit equiavalence checking methodology verifies that two given circuits implement the same functionality by exploiting the identity relation $f^(-1)(f(x))=x$.
+The state-of-the-art quantum circuit equivalence checking methodology verifies that two given circuits implement the same functionality by exploiting the identity relation $f^(-1)(f(x))=x$.
 The equivalence two circuits $G$ and $G'$ and their system matrices $U$ and $U'$ can be similarly stated as follows @burgholzer2021ec:
 
 $
@@ -19,7 +19,7 @@ $
          &<=> g_1 dot g_2 dot ... dot g_n dot g'^dagger_m dot ... dot g'^dagger_2 dot g'^dagger_1 = I
 $
 
-The @dd\-based alternating equiavalence checker uses @dd[s] to represent the intermediate state of the system matrix as the gates are applied.
+The @dd\-based alternating equivalence checker uses @dd[s] to represent the intermediate state of the system matrix as the gates are applied.
 Once all gates have been applied to the @dd, it has the identity form if and only if the circuits $G$ and $G'$ have the same system matrix, thus implementing the same functionality.
 
 Due to the associativity of the system matrices of quantum gates, the order in which gates are applied to the @dd may freely chosen, as long as the order within their respective circuits remains unaltered.
@@ -28,7 +28,7 @@ The aim of these schemes is to determine a sequence that keeps the @dd as close 
 
 There are a variety of existing approaches to providing a suitable oracle for quantum circuit equivalence checking based on @dd[s].
 @qcec currently implements gate-cost, lookahead, one-to-one, proportional and sequential application schemes @burgholzer2021ec.
-The following example illustrates the functionailty of each of these schemes.
+The following example illustrates the functionality of each of these schemes.
 
 #example(breakable: true)[
   Consider the two circuits in @circuit_g that implement the same system matrix $U$.
@@ -152,12 +152,12 @@ The following example illustrates the functionailty of each of these schemes.
 == Other Verification Methods
 Besides reducing a @dd to the identity, alternative methods for verifying equivalent functionality of quantum circuits exist.
 One approach involves the use of ZX-calculus, an alternative means of representing quantum circuits @kissinger2020pyzx.
-As with the @dd\-based approach, this representation can be used for equivalnce checking by constructing the two ZX diagram and checking if it is possible to transform one into the other @peham2022zx.
+As with the @dd\-based approach, this representation can be used for equivalence checking by constructing the two ZX diagram and checking if it is possible to transform one into the other @peham2022zx.
 Alternatively, the same more efficient approach of reducing the concatenation of the first circuit and the inverse of the second circuit to the identity may also be used with this method.
 
 Another method rewrites the quantum circuit as operations on a limited set of boolean states @berent2022sat.
-Using this encoding, it is possible to construct a so called miter circuit from two input circuits, which has a single output that is either 0 when the outputs of both circuits are the same ot 1 if this is not the case.
-By applying known SAT-solving techniques to this circuit, an efficient equivalence checker can thus be constructed by checking wether or not it is possible to produce a 1 at the output.
+Using this encoding, it is possible to construct a so called miter circuit from two input circuits, which has a single output that is either 0 when the outputs of both circuits are the same and 1 if this is not the case.
+By applying known SAT-solving techniques to this circuit, an efficient equivalence checker can thus be constructed by checking whether or not it is possible to produce a 1 at the output.
 
 Additionally, there are more efficient solutions for specific cases of the verification problem.
 For instance, in the case of proving non-equivalence, it is sufficient to find inputs that produce different outputs.
@@ -166,6 +166,6 @@ In this case, it is usually more efficient to simulate such a case on both circu
 Only if the simulation runs each produce identical outputs is another verification method attempted.
 
 While these alternative verification methods present interesting perspectives on quantum circuit equivalence checking, they are difficult to compare directly to the @dd\-based approach.
-They are therefore not used in the comparisons of equiavalence checking methodologies portrayed in this work.
+They are therefore not used in the comparisons of equivalence checking methodologies portrayed in this work.
 It may, however, be worth considering the impact that the developed methods may have on these as part of future work.
 

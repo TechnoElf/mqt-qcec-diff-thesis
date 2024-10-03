@@ -38,7 +38,7 @@ It is this simultaneity of classical states in quantum computers that can give t
 ) <example_bloch>
 
 Qubits are usually represented in one of three forms shown in @example_vec and @example_bloch.
-The bloch sphere is a good visualisation for the superposition that can occur in a single qubit.
+The Bloch sphere is a good visualisation for the superposition that can occur in a single qubit.
 Besides the two basis states (usually called |0〉 and |1〉) it is possible for the qubit to have any value on the surface of the sphere.
 These quantum states can be mapped to classical states by projecting them onto the z axis.
 This corresponds to a probability of either state being observed in a real quantum system.
@@ -73,7 +73,7 @@ Quantum states must also be normalised, a condition which is satisfied by the re
 
 #example(breakable: true)[
   @example_qc_dj shows a simple quantum circuit that implements a specific quantum algorithm.
-  The Deutsch, or, more generally, the Deutsch-Jozsa algorithm, solves the problem of determining wether a function is constant or balanced.
+  The Deutsch, or, more generally, the Deutsch-Jozsa algorithm, solves the problem of determining whether a function is constant or balanced @deutsch1992quantum.
   A constant function produces the same output for all inputs, whereas a balanced function produces a '0' for half of all possible inputs and a '1' for the other.
   The Deutsch algorithm does this for any boolean function with a single bit input and the Deutsch-Jozsa algorithm generalises this to any number of bits.
   While there are currently no known applications for this algorithm, it serves as a good example for the capability of quantum computation to outperform classical computation.
@@ -92,13 +92,13 @@ Quantum states must also be normalised, a condition which is satisfied by the re
 
   Multiplying these yields the state vector $frac(1, 2) vec(1, -1, 1, -1)$. The oracle $U$ has the unitary matrix $mat(overline(f(0)), f(0), 0, 0; f(0), overline(f(0)), 0, 0; 0, 0, overline(f(1)), f(1); 0, 0, f(1), overline(f(1)))$.
 
-  Applying this again to the preceeding state vector results in the new state vector $frac(1, 2) vec(overline(f(0)) - f(0), f(0) - overline(f(0)), overline(f(1)) - f(1), f(1) - overline(f(1)))$.
+  Applying this again to the preceding state vector results in the new state vector $frac(1, 2) vec(overline(f(0)) - f(0), f(0) - overline(f(0)), overline(f(1)) - f(1), f(1) - overline(f(1)))$.
 
   The rightmost Hadamard gate is described by the matrix $frac(1, sqrt(2)) mat(1, 1; 1, -1) times.circle mat(1, 0; 0, 1) = frac(1, sqrt(2)) mat(1, 0, 1, 0; 0, 1, 0, 1; 1, 0, -1, 0; 0, 1, 0, -1)$.
 
   This results in the final state vector $frac(1, 2 sqrt(2)) vec(overline(f(0)) - f(0) + overline(f(1)) - f(1), f(0) - overline(f(0)) + f(1) - overline(f(1)), overline(f(0)) - f(0) - overline(f(1)) + f(1), f(0) - overline(f(0)) - f(1) + overline(f(1)))$.
 
-  This vector cannot be split into the individual qubits, so the folowing table shows all possible output states for each realisation of $f$.
+  This vector cannot be split into the individual qubits, so the following table shows all possible output states for each realisation of $f$.
 
   #tablex(
     columns: (1fr, 1fr, 6fr, 2fr),
@@ -112,13 +112,13 @@ Quantum states must also be normalised, a condition which is satisfied by the re
   Observing the possible measurements, it is clear that this circuit does indeed satisfy the problem statement.
   When the function is balanced (produces the same number of '0' outputs as '1' outputs), the measurement is '1', whereas a constant function (the output is always '0' or '1') is measured as '0'.
 
-  Initially, this example may seem counterintuitive.
+  Initially, this example may seem counter intuitive.
   Computing the output of the quantum circuit necessitated the computation of all possible outputs of $f$ in addition to multiple matrix / vector multiplications and processing of state vectors.
   It would therefore appear that the quantum implementation of this algorithm is less efficient than the classical solution.
   This observation, however, disregards the fact that the above calculation solved the problem for all possible $f$.
   Additionally, an implementation of this algorithm on real quantum hardware would only have to evaluate the gate $U$ and thus the function $f$ once.
   This highlights the inefficiency of simulating quantum circuits on classical hardware, a problem that grows exponentially with the number of qubits.
   
-  Another conclusion that can be drawn from this is that it is therefore inneffective to verify the functionality of quantum circuits through plain simulation.
+  Another conclusion that can be drawn from this is that it is therefore ineffective to verify the functionality of quantum circuits through plain simulation.
   More effective methods will be discussed in this thesis.
 ]

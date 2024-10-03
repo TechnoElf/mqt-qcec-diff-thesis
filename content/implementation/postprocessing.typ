@@ -5,7 +5,7 @@ Using the implementation of the diff algorithms and the benchmarking framework, 
 Naively applying gates based on the outputs of the diff algorithm generally results in a worse overall runtime for most test cases compared to the state of the art application scheme, however.
 
 Comparing the output sequences of the proportional application scheme to that of the diff application scheme reveals a few possible reasons for this performance regression.
-For instance, the diff alogrithms tend to produce large blocks of insertion or deletion operations.
+For instance, the diff algorithms tend to produce large blocks of insertion or deletion operations.
 This makes sense when the goal is to produce a human-readable edit script, however, this property is counterproductive for the equivalence checking flow.
 A good application schemes ideally interleaves corresponding gates so that the size of the @dd remains minimal.
 
@@ -17,7 +17,7 @@ The correctness of the result only depends on all gates from both circuits being
 The exact sequence in which left and right gates are applied is irrelevant.
 It is therefore possible to use such heuristics to modify the application sequence.
 
-The post-proccessing steps are explained in the next sections, followed by a discussion of the final sequence that was used to achieve the best performance.
+The post-processing steps are explained in the next sections, followed by a discussion of the final sequence that was used to achieve the best performance.
 
 *Removing Empty Operations*
 
@@ -64,9 +64,9 @@ It may therefore make sense to combine these operations wherever possible to red
 *Swapping Left and Right Operations*
 
 The idea behind this post-processing step stemmed from the uncertainty of the way @mqt @qcec handles the left and right application of gates.
-If this was opposite to the expected direction, swapping the insertion and deletion operations should improve the runtime.
-Applying this step, however, resulted in consistently worse runtimes.
-As such, this step served as a sanity check of wether or not the algorithm was producing the correct output.
+If this was opposite to the expected direction, swapping the insertion and deletion operations should improve the run time.
+Applying this step, however, resulted in consistently worse run times.
+As such, this step served as a sanity check of whether or not the algorithm was producing the correct output.
 It was therefore not used in the final post processing sequence.
 
 #example[
@@ -89,7 +89,7 @@ It was therefore not used in the final post processing sequence.
 
 This step essentially implements the inverse of the "merging same" step.
 It aims to split up large operations.
-While splitting application operations like this should not affect the runtime, this step was used to develop other, more effective post-processing methods.
+While splitting application operations like this should not affect the run time, this step was used to develop other, more effective post-processing methods.
 
 Two different approaches were implemented for this step.
 The initial implementation iteratively split up each operation where the size was above a certain threshold.
@@ -117,7 +117,7 @@ This is identical to having two consecutive operations that apply gates from opp
 The aim of this step is therefore to reduce the size of the edit script by combining such operations that would result in the same application order anyway.
 
 #example[
-  This step works similarly to the "merge same" step, however, it instead checks wether the opposite directions of two consecutive operations are zero.
+  This step works similarly to the "merge same" step, however, it instead checks whether the opposite directions of two consecutive operations are zero.
   If this is the case, it sums them together, as shown in @example_merge_left_right_ops.
 
   #figure(
@@ -153,10 +153,10 @@ This shape is exactly the path that produces the optimal sequence of application
   ) <example_interleave_left_right_ops>
 ]
 
-*Final Postprocessing Steps*
+*Final Post-processing Steps*
 
-Various combinations of the procedures described in the previous sections were implemented in an attempt to reduce the runtime.
-Most sequences either had no discernable effect or worsened the results.
+Various combinations of the procedures described in the previous sections were implemented in an attempt to reduce the run time.
+Most sequences either had no discernible effect or worsened the results.
 
 The best results were achieved with the following sequence of post processing steps:
 1. Merge same operations.

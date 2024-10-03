@@ -11,7 +11,7 @@ The chosen algorithms are: Djikstra's algorithm (for its simplicity) @djikstra19
 === Djikstra's Algorithm
 Djikstra's algorithm is an @sssp algorithm @djikstra1959shortest.
 This means that it solves the problem of finding the shortest distance from a node of a graph to any other node.
-It can thus be trivially applied as a diff algorithm by finding the shortest path accross an edit graph.
+It can thus be trivially applied as a diff algorithm by finding the shortest path across an edit graph.
 @djikstras_algorithm_abstract presents a slightly modified form of the original algorithm that more closely matches modern programming languages.
 
 #figure(
@@ -152,13 +152,13 @@ The implementation is thus as follows:
   ) <example_djikstra>
 ]
 
-It was also considered wether to implement another @spsp algorithm such as A\* @hart1968astar.
+It was also considered whether to implement another @spsp algorithm such as A\* @hart1968astar.
 This was, however, deemed unnecessary, as there exist better solutions tailored specifically to edit graphs.
 
 === Myers' Algorithm
 Myers' algorithm in its original form only solves the @lcs problem without producing an edit script for transforming one input sequence into the other @myers1986diff.
 The version presented here has been extended to provide this functionality.
-It does so by using the edit graph traversal of the original algorithm to find a point that must be part of the shortest edit script and then recursively applying the algorithm to the two remaining subgraphs.
+It does so by using the edit graph traversal of the original algorithm to find a point that must be part of the shortest edit script and then recursively applying the algorithm to the two remaining sub graphs.
 @myers_algorithm_abstract presents the pseudocode for this procedure.
 
 #figure(
@@ -169,8 +169,8 @@ It does so by using the edit graph traversal of the original algorithm to find a
         + *if* the edit graph is trivial
           + *return* the trivial solution
         + *else*
-          + run $"myers"()$ on the top left subgraph recursively
-          + run $"myers"()$ on the bottom right subgraph recursively
+          + run $"myers"()$ on the top left sub graph recursively
+          + run $"myers"()$ on the bottom right sub graph recursively
           + *return* the combined edit scripts from the recursive calls and the central snake
         + *end*
       + *end*
@@ -183,7 +183,7 @@ It does so by using the edit graph traversal of the original algorithm to find a
 The following example visually demonstrates how the edit graph is split up by the recursive calls in the algorithm.
 
 #example(breakable: true)[
-  Applying the first step of the abstract Myers' algorithm to the sample edit graph from @example_edit_graph yields the connecting snake marked in red in @example_snake. The algorithm then saves this snake as part of the edit script and continues working on the resulting subgraphs, as shown in @example_recursion. It will then combine the edit scripts from these with the connecting snake to form a final edit script.
+  Applying the first step of the abstract Myers' algorithm to the sample edit graph from @example_edit_graph yields the connecting snake marked in red in @example_snake. The algorithm then saves this snake as part of the edit script and continues working on the resulting sub graphs, as shown in @example_recursion. It will then combine the edit scripts from these with the connecting snake to form a final edit script.
 
   #figure(
     diagram(
@@ -274,7 +274,7 @@ The following example visually demonstrates how the edit graph is split up by th
       edge((1, 1), (1, 2), "->"),
       edge((1, 2), (1, 3), "->"),
     ),
-    caption: [Remaining subgraphs to recursively apply the algorithm to.]
+    caption: [Remaining sub graphs to recursively apply the algorithm to.]
   ) <example_recursion>
 ]
 
@@ -284,7 +284,7 @@ The discussion on diff visualisation in the following sections explores some of 
 The version presented here is the final version that was integrated into @qcec.
 
 #code(breakable: true)[
-  The actual implementation of Myers' algorithm uses a slightly different procedure, where the subgraphs are checked for triviality instead of the input graph.
+  The actual implementation of Myers' algorithm uses a slightly different procedure, where the sub graphs are checked for triviality instead of the input graph.
   This would be slower when the entire edit graph is trivial, however, this edge case will almost never occur when applying this algorithm to equivalence checking of quantum circuits. 
 
   The following functions use the global lists $A$ and $B$ to access the structure of the input circuits.
@@ -404,7 +404,7 @@ The version presented here is the final version that was integrated into @qcec.
 ]
 
 === Patience Algorithm
-The patience algorithm is based around a divide-and-conquor approach that splits up the input sequences into many subranges, which the algorithm is then recursively run on.
+The patience algorithm is based around a divide-and-conquer approach that splits up the input sequences into many sub ranges, which the algorithm is then recursively run on.
 Specifically, it seeks to find elements that occur only once in each sequence and match these up to produce as many `keep` operations as possible.
 
 Unlike the Myers' algorithm, the patience algorithm does not, in fact, solve the @lcs problem.
@@ -594,10 +594,10 @@ The following example illustrates the functionality of the patience diff algorit
       align(horizon)[$->$],
       align(horizon)[$("none", 0 "to" 1) \ (1 "to" 1, 3 "to" 3) \ (3 "to" 5, "none") \ (7 "to" 7, "none")$]
     ),
-    caption: [Converting the sequence of unique elements to a sequence of subranges of the input strings.]
+    caption: [Converting the sequence of unique elements to a sequence of sub ranges of the input strings.]
   ) <example_unique_ranges>
 
-  The subranges are then iterated over to generate the edit script.
+  The sub ranges are then iterated over to generate the edit script.
   For the ranges found in @example_unique_ranges, only $(1 "to" 1, 3 "to" 3)$ must be evaluated recursively, while the others are trivial as they only contain elements from one of the two input strings.
   The edit script would therefore be $[$`+_`, `+c`, `keep a`, `keep _`, `keep b`, `-_`, `-c`, `-_`, `keep d`, `-_`$]$.
 

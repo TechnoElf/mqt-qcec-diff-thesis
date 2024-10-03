@@ -19,7 +19,7 @@ For example, the ZX-calculus uses a very similar method for verification as used
 In any approach that relies a certain order of operations to maintain efficiency, the solution explored here may be of some use.
 
 In general, it is fair to conclude that the development of better application schemes has mostly been unexplored thus far.
-This technology, however, is crucial to the progress of current equivalence checking schemes, which are in turn indispensible for the creation of more effective quantum circuit optimisation methods.
+This technology, however, is crucial to the progress of current equivalence checking schemes, which are in turn indispensable for the creation of more effective quantum circuit optimisation methods.
 The work presented here is a small step in that direction.
 //In the end, however, the real application schemes were the friends that were made along the way.
 

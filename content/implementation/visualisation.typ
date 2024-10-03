@@ -36,9 +36,9 @@ Using this framework, Djikstra's algorithm was implemented @djikstra1959shortest
 
 Djikstra's algorithm does not scale well to practical quantum circuits, however.
 The quadratic growth in runtime proved to make comparing even circuits on the order of thousands of gates take multiple seconds.
-Considering that the calculation of the edit script would only be a preprocessing step to the actual equivalence check, this is unacceptable.
+Considering that the calculation of the edit script would only be a pre-processing step to the actual equivalence check, this is unacceptable.
 Subsequently, three different versions of Myers' algorithm were implemented, each with a progressively lower level of abstraction.
-This approach was taken to make the functionality of the algorithm easier to follow as the relation of the pseudocode given in Myers' paper to the abstract algorithm is not immedieately clear @myers1986diff.
+This approach was taken to make the functionality of the algorithm easier to follow as the relation of the pseudocode given in Myers' paper to the abstract algorithm is not immediately clear @myers1986diff.
 Version 1 is thus closest to the abstract algorithm and version 3 is closest to Myers' pseudocode.
 
 Each of these versions was benchmarked using randomly generated sequences consisting of alphanumeric characters.
@@ -49,17 +49,17 @@ The system consists of an Intel Core i5-1240P with 32 GiB of RAM.
 #figure(
   tablex(
     columns: (2fr, 1fr, 1fr, 1fr),
-    rowspanx(2)[*Algorithm*], colspanx(3)[*Runtime for an $n$ by $n$ edit graph*], (), (),
+    rowspanx(2)[*Algorithm*], colspanx(3)[*Run time for an $n$ by $n$ edit graph*], (), (),
     (), [$n=10$], [$n=100$], [$n=1000$],
     [Djikstra's], cellx(align: right)[$qty("3979", "ns")$], cellx(align: right)[$qty("2352516", "ns")$], cellx(align: right)[$qty("2230049065", "ns")$],
     [Myers' (Version 1)], cellx(align: right)[$qty("3396", "ns")$], cellx(align: right)[$qty("907375", "ns")$], cellx(align: right)[$qty("1163141162", "ns")$],
     [Myers' (Version 2)], cellx(align: right)[$qty("1994", "ns")$], cellx(align: right)[$qty("236898", "ns")$], cellx(align: right)[$qty("124349238", "ns")$],
     [Myers' (Version 3)], cellx(align: right)[$qty("1784", "ns")$], cellx(align: right)[$qty("88573", "ns")$], cellx(align: right)[$qty("21964467", "ns")$]
   ),
-  caption: [Runtime of different diff Alogrithm implementations on random sequences of gates with varying lengths.]
+  caption: [Run time of different diff Algorithm implementations on random sequences of gates with varying lengths.]
 ) <kaleidoscope_runtime>
 
-@kaleidoscope_runtime also highlights the tradeoff between abstraction and performance.
+@kaleidoscope_runtime also highlights the trade off between abstraction and performance.
 Version 3 of Myers' algorithm is able to process circuits on the order of 10000 gates in just a few seconds, an improvement of two orders of magnitude over the initial implementation of Djikstra's algorithm.
 Version 3 is, however, still not an optimal solution.
 It makes heavy use of dynamically allocated memory, as this is more convenient to implement.

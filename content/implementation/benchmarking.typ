@@ -1,6 +1,6 @@
 == QCEC Benchmarking Tool
 Besides testing the newly developed approaches for correctness, possible performance regressions should be monitored as well.
-@qcec doesn’t have built-in benchmarks, however.
+@qcec does not have built-in benchmarks, however.
 For this purpose, a benchmarking tool was therefore developed to test different configurations of the equivalence checker on various circuit pairs. 
 This is necessary to show the quantitative improvement gained by using different application schemes.
 Two different approaches were implemented, which will be discussed in the following sections.

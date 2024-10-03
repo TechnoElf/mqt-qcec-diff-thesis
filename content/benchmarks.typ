@@ -142,7 +142,7 @@
 
 = Benchmarks
 This section presents the results of applying the implemented @qcec application scheme on practical problems.
-The focus herein lies on the performance in terms of run time of the methodology compared to previous approaches, as the accuracy is already guaranteed by the @dd\-based equivalnce checking method.
+The focus herein lies on the performance in terms of run time of the methodology compared to previous approaches, as the accuracy is already guaranteed by the @dd\-based equivalence checking method.
 First, the test cases used will be listed and justified.
 Next, the environment which was used to perform the benchmarks will be elaborated.
 Finally, the quantitative results will be presented and interpreted.
@@ -172,7 +172,7 @@ The application was then run on a virtual machine for each benchmarking and @qce
 The virtual machine was configured with 32 AMD EPYC 7H12 cores and 64GiB of RAM.
 It ran NixOS 23.11 as the operating system on top of an ESXi hypervisor.
 
-Initially, the application was locked to a single core using the taskset utility in an attempt to prevent the Linux scheduler from interfering with the benchmark.
+Initially, the application was locked to a single core using the `taskset` utility in an attempt to prevent the Linux scheduler from interfering with the benchmark.
 This significantly reduced the performance of the benchmarking application, however, which lowered the turnaround time for the benchmark results.
 It was determined that the variance due to context switches was low enough, so this restriction was removed.
 
@@ -181,7 +181,7 @@ It was determined that the variance due to context switches was low enough, so t
 - Parallel execution is disabled.
 - The alternating checker is enabled. All other checkers are disabled.
 - All optimisations are disabled.
-- The application scheme is set to either proprtional or diff-based.
+- The application scheme is set to either proportional or diff-based.
 - The trace threshold is set to $10^(-8)$
 - Partial equivalence checking is disabled.
 
@@ -194,8 +194,8 @@ Additionally, the following configuration was used for @qcec Bench:
 The results are sorted into bins and portrayed as a histogram.
 A larger count in a bin that is further to the left therefore points towards a better algorithm.
 
-This graph suggests that there is no significant difference in the runtime of the tested algorithms and configurations in most cases.
-The proportional application scheme does, however, appear to have a slight advantage in benchmarks that have a higher runtime.
+This graph suggests that there is no significant difference in the run time of the tested algorithms and configurations in most cases.
+The proportional application scheme does, however, appear to have a slight advantage in benchmarks that have a higher run time.
 
 #figure(
   canvas({
@@ -234,7 +234,7 @@ The proportional application scheme does, however, appear to have a slight advan
   ]
 ) <results_overview_histogram>
 
-The difference between the runtimes of the application schemes can be further highlighted by graphing the relative improvement according to the following formula:
+The difference between the run times of the application schemes can be further highlighted by graphing the relative improvement according to the following formula:
 
 $ p_"improvement" = (t_"proportional" - t_"diff") / t_"proportional" * 100% $
 
@@ -265,7 +265,7 @@ Taking the average of this improvement for each variant of the diff-based applic
 #figure(
   tablex(
     columns: (1fr, 1fr),
-    [*Algorithm*], [*Average Runtime Improvement (%)*],
+    [*Algorithm*], [*Average Run Time Improvement (%)*],
     [Myers' Diff], align(right, [#calc.round(unclip(results-r1-b5q16).map(r => -(r.cmyers-p.mu / r.cprop.mu * 100 - 100)).sum() / unclip(results-r1-b5q16).len(), digits: 3)]),
     [Myers' Diff (Processed)], align(right, [#calc.round(unclip(results-r1-b5q16).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).sum() / unclip(results-r1-b5q16).len(), digits: 3)]),
     [Myers' Diff (Reversed)], align(right, [#calc.round(unclip(results-r1-b5q16).map(r => -(r.cmyersrev-p.mu / r.cprop.mu * 100 - 100)).sum() / unclip(results-r1-b5q16).len(), digits: 3)]),
@@ -274,17 +274,17 @@ Taking the average of this improvement for each variant of the diff-based applic
 
   ),
   caption: [
-    The average of the runtime improvement of all benchmark instances over the proportional application scheme for each variant of the diff application scheme.
+    The average of the run time improvement of all benchmark instances over the proportional application scheme for each variant of the diff application scheme.
     This value is used as an indicator to determine the relative performance of the application schemes.
   ]
 ) <results_average_improvement>
 
-These results show that, on average, every variant of the diff-base application scheme results in a significantly worse runtime compared to the state-of-the-art proportional application scheme.
+These results show that, on average, every variant of the diff-base application scheme results in a significantly worse run time compared to the state-of-the-art proportional application scheme.
 Of these, the reversed Myers' algorithms performed the worst by a significant margin.
 On the other hand, the processed variants performed better than their plain counterparts.
-This shows that the approach of reversing the second circuit before running the diff algorithm is clearly wrong, but processing the edit script to make it more suitable for use in the equivalnce checker tends to work in most cases.
+This shows that the approach of reversing the second circuit before running the diff algorithm is clearly wrong, but processing the edit script to make it more suitable for use in the equivalence checker tends to work in most cases.
 
-By comparing the run time improvement to various independent variables, a scheme was developed to determine wether or not applying the diff application scheme would result in a positive improvement.
+By comparing the run time improvement to various independent variables, a scheme was developed to determine whether or not applying the diff application scheme would result in a positive improvement.
 Properties such as the circuit length in terms of gate count, the number of qubits in either circuit, and the @dd node count were considered.
 However, the key variable for this scheme turned out to be the equivalence rate of the two circuits.
 It was determined by counting the number of keep operations in the edit script and dividing it by the total size of the circuits.
@@ -349,7 +349,7 @@ In @results_equivalence_rate, the results of each variant are plotted dependent 
       }
     )
   }),
-  caption: [The runtime improvement dependent on the circuit equivalence rate for each diff algorithm.]
+  caption: [The run time improvement dependent on the circuit equivalence rate for each diff algorithm.]
 ) <results_equivalence_rate>
 
 The plot suggests that diff-based application schemes tend to do better when the equivalence rate is higher.
@@ -382,7 +382,7 @@ The results of the application scheme based on the processed Myers' algorithm lo
     )
   }),
   caption: [ 
-    The runtime improvement dependent on the circuit equivalence rate for the application scheme based on the processed Myers' diff algorithm.
+    The run time improvement dependent on the circuit equivalence rate for the application scheme based on the processed Myers' diff algorithm.
     Using the vertical line at 0.35, the benchmark instances can be filtered into cases where the diff application scheme is superior to the proportional application scheme.
   ]
 ) <results_equivalence_rate_processed>
@@ -417,6 +417,6 @@ For the benchmark instances used in this thesis, it was sufficiently precise, ho
 #let min = -calc.round(filter(unclip(results-r1-b5q16)).map(r => -(r.cmyers-pmismc.mu / r.cprop.mu * 100 - 100)).fold(0, calc.min), digits: 3)
 
 These results are significantly better than those obtained through the naive approach of applying the scheme to all equivalence checking instances.
-The average of the runtime improvement of the filtered test cases is $#mu%$, with a standard deviation of $#sigma%$.
+The average of the run time improvement of the filtered test cases is $#mu%$, with a standard deviation of $#sigma%$.
 Furthermore, the application scheme results in a maximum improvement of $#max%$ and a maximum regression of $#min%$.
 

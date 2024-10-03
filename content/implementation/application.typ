@@ -2,7 +2,7 @@
 
 == QCEC Application Scheme
 Based on the lessons learnt from Kaleidoscope, the Myers' algorithm was implemented as an application scheme in @mqt @qcec.
-This was accomplieshed by adding appropriate C++ classes and extending the existing functionality for configuring equivalence checking runs.
+This was accomplished by adding appropriate C++ classes and extending the existing functionality for configuring equivalence checking runs.
 
 === The `DiffApplicationScheme` Class
 In general, @qcec is written in a very flexible manner.
