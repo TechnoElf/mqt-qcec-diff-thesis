@@ -6,7 +6,7 @@
   show outline.entry.where(
     level: 1
   ): it => {
-    v(1em)
+    v(0.5em)
     strong(it)
   }
 

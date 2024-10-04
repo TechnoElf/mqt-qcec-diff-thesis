@@ -59,6 +59,8 @@ Furthermore, it performs post processing of the edit script to make it suitable 
 The patience diff algorithm was also implemented in a method named `patienceDiff()` that had a structure analogous to `myersDiff()`.
 This method is not used by the `DiffApplicationScheme` however, as the results were found to be very similar to that of `myersDiff()`.
 
+#pagebreak()
+
 === Configuration Changes
 Besides adding the class for the diff-based application scheme, other areas of the @qcec code needed adjustment to integrate it into the codebase.
 For instance, the `ApplicationSchemeType` enum and its utility functions were extended to allow representation of the new class.

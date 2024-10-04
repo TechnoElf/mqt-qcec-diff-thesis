@@ -616,6 +616,8 @@ The following code block discusses the final implementation that was created for
   $x$, $y$, $m$, and $n$ are there to provide the recursive functionality of the function.
   These specify the subsection of the circuits being processed and must be set to $0$, $0$ and the length of the two sequences respectively.
 
+  #set text(size: 11.8pt)
+
   #block(
     pseudocode-list[
       + *def* $"patience"(x, y, m, n)$

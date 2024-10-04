@@ -13,7 +13,7 @@ The terminal nodes represent output values and may not have outgoing edges.
 A @bdd is a specific kind of decision diagram, where there are two terminal nodes (0 and 1) and each decision node has two outgoing edges, depending solely on a single bit of an input value.
 @bdd[s] may be used to represent any boolean function, as illustrated by the following example.
 
-#example(breakable: true)[
+#example(breakable: false)[
   Example @bdd[s] implementing boolean functions with an arity of $2$ are show in @example_bdd_xor and @example_bdd_and.
 
   #figure(
@@ -139,7 +139,7 @@ Therefore, only a single end node with the value $1$ is needed in quantum @dd[s]
 
 The following example demonstrates the relation between a quantum gate, its system matrix and the resulting @dd representation.
 
-#example(breakable: true)[
+#example(breakable: false)[
   #figure(
     grid(
       columns: (4fr, 1fr, 4fr, 1fr, 4fr),

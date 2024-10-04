@@ -66,7 +66,7 @@ If the first qubit where to be measured in this system, we would also know the c
 Additionally, there are a few important restrictions on quantum states and quantum operations that stem from quantum mechanics.
 Unlike classical electronic circuits, from which this analogy is derived, quantum circuits must have the same number of inputs as outputs.
 They may also not contain loops.
-These restrictions are summarised in the reversibility constraint.
+These restrictions are summarised in the reversibility constraint @nielsen2010quantum.
 
 Besides being reversible, quantum gates must also be unitary.
 Quantum states must also be normalised, a condition which is satisfied by the requirement for unitary operations.
@@ -86,17 +86,23 @@ Quantum states must also be normalised, a condition which is satisfied by the re
     caption: [A quantum circuit implementing the Deutsch-Jozsa algorithm]
   ) <example_qc_dj>
 
-  The input may be represented as a state vector $vec(0, 1, 0, 0)$ corresponding to the state $0|00〉 + 1|01〉 + 0|10〉 + 0|11〉$.
+  The input may be represented as a state vector $S_1$ corresponding to the state $0|00〉 + 1|01〉 + 0|10〉 + 0|11〉$.
+  The leftmost Hadamard gates may in turn be represented as the unitary matrix $U_1$.
 
-  The leftmost Hadamard gates may in turn be represented as the unitary matrix $frac(1, sqrt(2)) mat(1, 1; 1, -1) times.circle frac(1, sqrt(2)) mat(1, 1; 1, -1) = frac(1, 2) mat(1, 1, 1, 1; 1, -1, 1, -1; 1, 1, -1, -1; 1, -1, -1, 1)$.
+  $ S_1 = vec(0, 1, 0, 0) #h(1cm) U_1 = frac(1, sqrt(2)) mat(1, 1; 1, -1) times.circle frac(1, sqrt(2)) mat(1, 1; 1, -1) = frac(1, 2) mat(1, 1, 1, 1; 1, -1, 1, -1; 1, 1, -1, -1; 1, -1, -1, 1) $
 
-  Multiplying these yields the state vector $frac(1, 2) vec(1, -1, 1, -1)$. The oracle $U$ has the unitary matrix $mat(overline(f(0)), f(0), 0, 0; f(0), overline(f(0)), 0, 0; 0, 0, overline(f(1)), f(1); 0, 0, f(1), overline(f(1)))$.
+  Multiplying these yields the state vector $S_2$. The oracle $U$ has the unitary matrix $U_U$. 
 
-  Applying this again to the preceding state vector results in the new state vector $frac(1, 2) vec(overline(f(0)) - f(0), f(0) - overline(f(0)), overline(f(1)) - f(1), f(1) - overline(f(1)))$.
+  $ S_2 = frac(1, 2) vec(1, -1, 1, -1) #h(1cm) U_U = mat(overline(f(0)), f(0), 0, 0; f(0), overline(f(0)), 0, 0; 0, 0, overline(f(1)), f(1); 0, 0, f(1), overline(f(1))) $
 
-  The rightmost Hadamard gate is described by the matrix $frac(1, sqrt(2)) mat(1, 1; 1, -1) times.circle mat(1, 0; 0, 1) = frac(1, sqrt(2)) mat(1, 0, 1, 0; 0, 1, 0, 1; 1, 0, -1, 0; 0, 1, 0, -1)$.
+  Applying this again to the preceding state vector results in the new state vector $S_3$.
+  The rightmost Hadamard gate is described by the matrix $U_2$.
 
-  This results in the final state vector $frac(1, 2 sqrt(2)) vec(overline(f(0)) - f(0) + overline(f(1)) - f(1), f(0) - overline(f(0)) + f(1) - overline(f(1)), overline(f(0)) - f(0) - overline(f(1)) + f(1), f(0) - overline(f(0)) - f(1) + overline(f(1)))$.
+  $ S_3 = frac(1, 2) vec(overline(f(0)) - f(0), f(0) - overline(f(0)), overline(f(1)) - f(1), f(1) - overline(f(1))) #h(1cm) U_2 = frac(1, sqrt(2)) mat(1, 1; 1, -1) times.circle mat(1, 0; 0, 1) = frac(1, sqrt(2)) mat(1, 0, 1, 0; 0, 1, 0, 1; 1, 0, -1, 0; 0, 1, 0, -1) $
+
+  This results in the final state vector $S_4$.
+
+  $ S_4 = frac(1, 2 sqrt(2)) vec(overline(f(0)) - f(0) + overline(f(1)) - f(1), f(0) - overline(f(0)) + f(1) - overline(f(1)), overline(f(0)) - f(0) - overline(f(1)) + f(1), f(0) - overline(f(0)) - f(1) + overline(f(1))) $
 
   This vector cannot be split into the individual qubits, so the following table shows all possible output states for each realisation of $f$.
 
@@ -109,7 +115,7 @@ Quantum states must also be normalised, a condition which is satisfied by the re
     [$1$], [$1$], [$-frac(1, sqrt(2))|00〉 + frac(1, sqrt(2))|01〉 + 0|10〉 + 0|11〉$], [$0$]
   )
 
-  Observing the possible measurements, it is clear that this circuit does indeed satisfy the problem statement.
+  Observing the possible measurements, it is clear that this circuit does indeed satisfy the problem statement given by Deutsch.
   When the function is balanced (produces the same number of '0' outputs as '1' outputs), the measurement is '1', whereas a constant function (the output is always '0' or '1') is measured as '0'.
 
   Initially, this example may seem counter intuitive.

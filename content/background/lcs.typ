@@ -39,7 +39,8 @@ The significance of this notation to the application of @lcs algorithms to quant
 
   The length of the @lcs for these strings is 2, representing the maximum number of keep operations that can be in a corresponding edit script.
   The @lcs[s] themselves are "hx" and "hh".
-  One possible minimal edit script that contains the @lcs "hx" is `+y, =h, +h, =x, -h, -y` or $[(0, 1), (1, 1), (1, 0), (1, 1), (0, 2)]$ using the notation introduced in this thesis.
+  One possible minimal edit script that contains the @lcs "hx" is `+y, =h, +h, =x, -h, -y`.
+  This corresponds to $[(0, 1), (1, 1), (1, 0), (1, 1), (0, 2)]$ when using the notation introduced in this section.
   The length of the shortest edit script is therefore 6, which is equivalent to the @lcs length subtracted from the sum of the input sequences.
 ]
 
@@ -48,6 +49,8 @@ The primary goal of these algorithms, however, is usually to produce an edit scr
 One possible method is to use an edit graph that represents all possible edit scripts and finding the shortest path from one sequence to the other.
 While it is possible to use standard @sssp algorithms for this task, specialised approaches exist that make better use of the structure of the edit graph.
 Two such algorithms will be explored in the following sections.
+
+#pagebreak()
 
 #example(breakable: true)[
   @example_edit_graph shows the entire edit graph of the sequences "hxhy" and "yhhx".

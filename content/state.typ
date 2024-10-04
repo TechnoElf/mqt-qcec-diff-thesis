@@ -30,6 +30,8 @@ There are a variety of existing approaches to providing a suitable oracle for qu
 @qcec currently implements gate-cost, lookahead, one-to-one, proportional and sequential application schemes @burgholzer2021ec.
 The following example illustrates the functionality of each of these schemes.
 
+#pagebreak()
+
 #example(breakable: true)[
   Consider the two circuits in @circuit_g that implement the same system matrix $U$.
 
@@ -72,7 +74,7 @@ The following example illustrates the functionality of each of these schemes.
 
   To verify the equivalence of $G$ and $G'$ using the @dd\-based alternating equivalence checking methodology, the latter must first be inverted to produce $G'^dagger$.
   @circuit_g_dagger visualises this circuit.
-  In this case $G'^dagger$ happens to have the same system matrix as $G'$ because $G'$ is symmetric, but this is not necessarily always the case.
+  In this case $G'^dagger$ happens to have the same system matrix as $G'$, because $G'$ is symmetric, but this is not necessarily always the case.
 
   #figure(
     grid(
@@ -125,13 +127,11 @@ The following example illustrates the functionality of each of these schemes.
 
   #figure(
     tablex(
-      columns: (1fr, 1fr, 1fr, 1fr, 1fr),
-      [*One-to-one*], [*Sequential*], [*Proportional*], [*Lookahead*], [*Gate-cost*],
+      columns: (1fr, 1fr, 1fr),
+      [*One-to-one*], [*Sequential*], [*Proportional*],
       align(center, [$\ (1, 1) \ (1, 1) \ (0, 2)$]),
       align(center, [$\ (2, 4)$]),
-      align(center, [$\ (1, 2) \ (1, 2)$]),
-      align(center, [? \ (depends on the implementation of the @dd)]),
-      align(center, [? \ (depends on the implementation of the @dd)])
+      align(center, [$\ (1, 2) \ (1, 2)$])
     ),
     caption: [Different state-of-the-art application schemes.]
   ) <application_schemes>
@@ -157,7 +157,7 @@ Alternatively, the same more efficient approach of reducing the concatenation of
 
 Another method rewrites the quantum circuit as operations on a limited set of boolean states @berent2022sat.
 Using this encoding, it is possible to construct a so called miter circuit from two input circuits, which has a single output that is either 0 when the outputs of both circuits are the same and 1 if this is not the case.
-By applying known SAT-solving techniques to this circuit, an efficient equivalence checker can thus be constructed by checking whether or not it is possible to produce a 1 at the output.
+By applying known boolean satisfiability solving techniques to this circuit, an efficient equivalence checker can thus be constructed by checking whether or not it is possible to produce a 1 at the output.
 
 Additionally, there are more efficient solutions for specific cases of the verification problem.
 For instance, in the case of proving non-equivalence, it is sufficient to find inputs that produce different outputs.
